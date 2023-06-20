@@ -1,0 +1,14 @@
+main.
+main :- '[]'(W),stack(W,X),
+    push(X,3,Y1),push(Y1,2,Y2),push(Y2,5,Y3),
+    push(Y3,10,Y4),pop(Y4,!R,Y5),peek(Y5,!R,Y6),
+    pop(Y6,!R,Y7),cliant(Y7,!R).
+
+    
+stack(W,X),push(X,D,Y1) :- '.'(D,W,A),stack(A,Y1). 
+
+stack(W,X), pop(X,!R,Y1) ,'.'(D,L,W) :- stack(L,Y1),!R=D. 
+'[]'(W), stack(W,X), pop(X,!R,Y1)     :- '[]'(W),stack(W,Y1),empty(!R).
+
+% stack(W,X), peek(X,!R,Y1) ,'.'(D,L,W) :- ground(D)| stack(W,Y1),'.'(D,L,W),D=!R. 
+% '[]'(W), stack(W,X), peek(X,!R,Y1)    :- '[]'(W),stack(W,Y1),empty(!R).

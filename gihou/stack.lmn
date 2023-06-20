@@ -1,0 +1,20 @@
+
+% cliant(ins(3,ins(2,ins(5,[])))).
+list=[1,2,3]
+
+%  io.print_line(io.stdout,"Hello, World!",io.free_port).
+%  io.print_line(io.print_line(io.stdout,"hello"),"World!",io.free_port).
+%  io.stdout(X),io.print_line(X,"hello1",Y1),io.print_line(Y1,"hello2",Y2),io.print_line(Y2,"hello3",Z),io.free_port(Z).
+
+ '[]'(W),stack(W,X),
+    push(X,3,Y1),push(Y1,2,Y2),push(Y2,5,Y3),
+    push(Y3,10,Y4),pop(Y4,R1,Y5),peek(Y5,R2,Y6),
+    pop(Y6,R3,Y7),cliant(Y7,R1,R2),answer=R3.
+ 
+ stack(W,X),push(X,D,Y1) :- '.'(D,W,A),stack(A,Y1). 
+ 
+ stack(W,X), pop(X,R,Y1) ,'.'(D,L,W) :- stack(L,Y1),R=D. 
+ '[]'(W), stack(W,X), pop(X,R,Y1)     :- '[]'(W),stack(W,Y1),empty(R).
+ 
+ stack(W,X), peek(X,R,Y1) ,'.'(D,L,W) :- ground(D)| stack(W,Y1),'.'(D,L,W),D=R. 
+ '[]'(W), stack(W,X), peek(X,R,Y1)    :- '[]'(W),stack(W,Y1),empty(R).

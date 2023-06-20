@@ -1,0 +1,27 @@
+
+sample=[1,2,3].
+
+ '[]'(W),list(W,X),
+     insert(X,rec(3,""),Y1),insert(Y1,rec(2,""),Y2),insert(Y2,rec(5,""),Y3),search(Y3,5,Z,R),
+         cliant(Z,R).
+ 
+ list(W,X),insert(X,D,Y) :- insert(D,W,A),list(A,Y).
+ B = insert(rec(K,D),[]) :-  B='.'(rec(K,D),[]). %最後に挿入
+ B = insert(rec(K,D),'.'(rec(NK,ND),NL)) :-
+     NK < K| B = '.'(rec(NK,ND),insert(rec(K,D),NL)). %次へ
+ B = insert(rec(K,D),'.'(rec(NK,ND),NL)) :-
+     NK > K| B = '.'(rec(K,D),'.'(rec(NK,ND),NL)). %挿入成功
+ B = insert(rec(K,D),'.'(rec(NK,ND),NL)) :-
+     NK = K| B = '.'(rec(NK,ND),NL), fail(insert,rec(K,D)). %そのキーは使用済み
+ 
+ list(W,X),search(X,D,Y,R) :- search(D,W,R,A),list(A,Y).
+ B = search(K,[],R) :-  B=[],R=fail(K,serch). %最後まで探索してない
+ B = search(K,'.'(rec(NK,ND),NL),R) :-
+     NK < K| B = '.'(rec(NK,ND),search(K,NL,R)). %次へ
+ B = search(K,'.'(rec(NK,ND),NL),R) :-
+     NK > K| B = '.'(rec(NK,ND),NL), fail(R,K,search). %途中まで探索してない
+ B = search(K,'.'(rec(NK,ND),NL),R) :-
+     NK = K,ground(ND)| B = '.'(rec(NK,ND),NL), succ(R,rec(K,ND),serch). %検索成功 
+
+
+
