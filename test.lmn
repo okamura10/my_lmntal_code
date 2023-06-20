@@ -1,0 +1,50 @@
+% 目標の二分探索木
+% head=l(g(c(a(z,z),e(z,z)),i(h,z)),p(m(z,n(z,z)),x(r(z,s(z,z)),z))).
+% head(12(7(3(1(z,z),5(z,z)),9(8,26)),16(13(z,14(z,z)),24(18(26,19(z,z)),z)))).
+
+%再帰でどうにかならないかなと思ったけれど、ルールをマッチさせるためにはnodeを用意して、そこに(親リンク,子リンク1,2,データ)とするしかないのだろうか...
+
+head(12,7).
+head(X,Y):- X<Y|true.
+
+
+
+
+ 
+%hashimotoさんB4日誌より
+% head(n(null, null, null)).
+% insert(7).
+% insert(6).
+% insert(9).
+% search(6).
+% search(7).
+ 
+% insert(X), head(n(Y, L, R))         :- insert(i, X), head(n(Y, L, R, i)).
+% insert(i, X), P = n(null, null, null, i)  :- P = n(X, n(null, null, null), n(null, null, null)).
+% insert(i, X), P = n(Y, n(A, L, R), R1, i) :- X < Y | insert(i, X), P = n(Y, n(A, L, R, i), R1).
+% insert(i, X), P = n(Y, L1, n(A, L, R), i) :- X > Y | insert(i, X), P = n(Y, L1, n(A, L, R, i)).
+ 
+% search(head, X), head(n(Y, L, R)) :- search(c, X), head(n(Y, L, R, c)).
+% search(c, X), P = n(Y, L, R, c) :- X =:= Y | true(X), P = n(Y, L, R,).
+% search(c, X), P = n(Y, n(A, L, R), R2, c) :- X =< Y | search(c, X), P = n(Y, n(A, L, R, c), R2).
+% search(c, X), P = n(Y, L2, n(A, L, R), c) :- X > Y | search(c, X), P = n(Y, L2, n(A, L, R, c)).
+% search(c, X), P = n(null, L, R, c) :- false(X), P = n(null, L, R).
+
+
+%abcdefghij k l m n o p q r s t u v w x y z
+%1234567891011121314151617181920212223242526
+
+%head=l(g,p).
+%head(N) :- se=string.from(N).
+
+%データアトムの理解のためにためしたもの↓
+%1(A),2(A),a(C),b(C).
+%3(4),	c(d).
+%5(6(B),7(B)),e(f(D),g(D)).
+%8(9,10),h(i,j).
+%11('12'(13(z),14),18).
+%11(z,a).
+%5(X,Y) :- X<Y| c(d).
+%5(X,Y) :- X>=Y| a(b).
+%8(X,Y) :- X<Y |20(X,Y).
+
