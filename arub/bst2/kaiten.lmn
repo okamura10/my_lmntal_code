@@ -1,0 +1,34 @@
+% 二分探索木
+
+
+ % main.
+ % main :- bst(node(10,node(2,node(1,z,z),node(7,node(5,z,z),node(8,z,z))),node(13,node(11,z,z),node(22,node(15,z,z),node(23,z,z))))).
+ %  bst(node(2,node(1,z,z),node(7,node(5,z,z),node(8,z,z),rotR))).
+ %  bst(node(2,node(1,z,z),node(7,node(5,z,z),node(8,z,z),rotL))).
+
+ main.
+ main :- cliant([insert(5,!X),insert(1,!X),insert(23,!X),insert(11,!X),
+                insert(15,!X),search(1,!X),search(12,!X),insert(22,!X),
+                insert(8,!X),insert(13,!X),insert(7,!X),insert(7,!X)
+                    |bst(node(10,node(2,z,z),z))],!X).
+
+% ステートビューワ見るための小さめのやつ。
+%  main :- cliant([insert(9,!X),insert(8,!X),insert(6,!X)
+%                     |bst(node(10,node(2,z,z),z))],!X).
+
+ '.'(insert(D,!H),L,NM), bst(B,L) :- NM=bst(insert(B,D,!H)).
+ B = insert(z,D,!H) :- B = node(D,z,z). %末端
+ B = insert(node(F, L, R),D,!H) :- D < F | B = node(F, insert(L,D,!H), R,rotR).    %右部分木
+ B = insert(node(F, L, R),D,!H) :- D > F | B = node(F, L, insert(R,D,!H),rotL).   %左部分木
+ B = insert(node(F, L, R),D,!H) :- D = F | B = node(F, L, R),  !H=fail(insert,D). %使用済み
+
+ % 根元に挿入するための回転操作
+ B = node(F, node(F2,L,R2), R ,rotR) :- B=node(F2,L,node(F,R2,R)).
+ B = node(F, L, node(F2,L2,R) ,rotL) :- B=node(F2,node(F,L,L2),R).
+
+ '.'(search(D,!H),L,NM), bst(B,L) :- NM=bst(search(B,D,!H)).
+ B = search(z,D,!H) :- B=z,!H=fail(search,D).
+ B = search(node(F, L, R),D,!H) :- D < F | B = node(F, search(L,D,!H), R).    %右部分木
+ B = search(node(F, L, R),D,!H) :- D > F | B = node(F, L, search(R,D,!H)).   %左部分木
+ B = search(node(F, L, R),D,!H) :- D = F | B = node(F, L, R), !H=succ(serch,D). 
+

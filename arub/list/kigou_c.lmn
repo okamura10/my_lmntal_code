@@ -1,0 +1,31 @@
+% 記号表抽象データ型
+% 整列した配列による実装
+% クライアント（実行が一意）
+
+% list=[10,13,20].
+
+head=[rec(10,"10th"),rec(15,"15th"),rec(20,"20th")].
+cliant=[insert(31,"No31"),insert(8, "No8"),insert(21,"No21"),insert(9, "No9"),insert(15,"No15"),search(10),search(1000)].
+
+
+cliant='.'(insert(K,D),L), head='.'(X,Y) :-  head=insert(rec(K,D),'.'(X,Y)), cliant=L.
+% insert(K,D), head='.'(X,Y) :- head=insert(rec(K,D),'.'(X,Y)).
+B = insert(rec(K,D),[]) :-  B='.'(rec(K,D),[]). %最後に挿入
+B = insert(rec(K,D),'.'(rec(NK,ND),NL)) :-
+    NK < K| B = '.'(rec(NK,ND),insert(rec(K,D),NL)). %次へ
+B = insert(rec(K,D),'.'(rec(NK,ND),NL)) :-
+    NK > K| B = '.'(rec(K,D),'.'(rec(NK,ND),NL)). %挿入成功
+B = insert(rec(K,D),'.'(rec(NK,ND),NL)) :-
+    NK = K| B = '.'(rec(NK,ND),NL), fail(insert,rec(K,D)). %そのキーは使用済み
+
+cliant='.'(search(K),L), head='.'(X,Y) :- head=search(K,'.'(X,Y)), cliant=L.
+% search(K), head='.'(X,Y) :- head=search(K,'.'(X,Y)).
+B = search(K,[]) :-  B=[],fail(K,serch). %最後まで探索してない
+B = search(K,'.'(rec(NK,ND),NL)) :-
+    NK < K| B = '.'(rec(NK,ND),search(K,NL)). %次へ
+B = search(K,'.'(rec(NK,ND),NL)) :-
+    NK > K| B = '.'(rec(NK,ND),NL), fail(K,search). %途中まで探索してない
+B = search(K,'.'(rec(NK,ND),NL)) :-
+    NK = K,ground(ND)| B = '.'(rec(NK,ND),NL), succ(rec(K,ND),serch). %検索成功 
+
+

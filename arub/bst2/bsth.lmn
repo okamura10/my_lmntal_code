@@ -1,0 +1,25 @@
+% 二分探索木
+
+%  head =z.
+%  a=bst(node(10,node(2,z,z),z)).
+%  cliant=[insert(7), insert(7),search(10),insert(15),search(10),search(1),insert(22), insert(8),insert(13),search(12)].
+%  main.
+%  main,a(X),'[]'(Y) :- X=Y.
+ 
+ main.
+ main :- cliant([insert(5,!X),insert(1,!X),insert(23,!X),insert(11,!X),
+                insert(15,!X),search(1,!X),search(12,!X),insert(22,!X),
+                insert(8,!X),insert(13,!X),insert(7,!X),insert(7,!X)
+                    |bst(node(10,node(2,z,z),z))],!X).
+ 
+ '.'(insert(D,!H),L,NM), bst(B,L) :- NM=bst(insert(B,D,!H)).
+ B = insert(z,D,!H) :- B = node(D,z,z). %末端
+ B = insert(node(F, L, R),D,!H) :- D < F | B = node(F, insert(L,D,!H), R).    %右部分木
+ B = insert(node(F, L, R),D,!H) :- D > F | B = node(F, L, insert(R,D,!H)).   %左部分木
+ B = insert(node(F, L, R),D,!H) :- D = F | B = node(F, L, R),  !H=fail(insert,D). %使用済み
+
+ '.'(search(D,!H),L,NM), bst(B,L) :- NM=bst(search(B,D,!H)).
+ B = search(z,D,!H) :- B=z,!H=fail(search,D).
+ B = search(node(F, L, R),D,!H) :- D < F | B = node(F, search(L,D,!H), R).    %右部分木
+ B = search(node(F, L, R),D,!H) :- D > F | B = node(F, L, search(R,D,!H)).   %左部分木
+ B = search(node(F, L, R),D,!H) :- D = F | B = node(F, L, R), !H=succ(serch,D). 

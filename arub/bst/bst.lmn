@@ -1,0 +1,19 @@
+% 二分探索木
+
+%  head =z.
+ head=node(10,node(2,z,z),z).
+ 
+ insert(7).
+ search(10).
+ 
+ insert(D), head=B :-head=insert(B,D).
+ B = insert(z,D) :- B = node(D,z,z). %末端
+ B = insert(node(F, L, R),D) :- D < F | B = node(F, insert(L,D), R).    %右部分木
+ B = insert(node(F, L, R),D) :- D > F | B = node(F, L , insert(R,D)).   %左部分木
+ B = insert(node(F, L, R),D) :- D = F | B = node(F, L, R),  fail(insert,D). %使用済み
+ 
+ search(D), head=B :- head = search(B,D).
+ B = search(z,D) :- B=z,fail(search,D).
+ B = search(node(F, L, R),D) :- D < F | B = node(F, search(L,D), R).    %右部分木
+ B = search(node(F, L, R),D) :- D > F | B = node(F, L , search(R,D)).   %左部分木
+ B = search(node(F, L, R),D) :- D = F | B = node(F, L , R), succ(serch,D). 
