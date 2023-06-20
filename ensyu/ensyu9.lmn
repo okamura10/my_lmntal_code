@@ -1,0 +1,26 @@
+head = [1,2,4,9,10], head = [3,5,6,7,8].
+
+head(X), head(Y) :- merge(X,Y,head).
+
+merge([A|T1],[B|T2],Z) :- A =< B | merge(T1,[B|T2],Z0),Z=[A|Z0].
+merge([A|T1],[B|T2],Z) :- A > B | merge([A|T1],T2,Z0),Z=[B|Z0].
+
+
+merge(X,[],Z) :- X=Z.
+merge([],X,Z) :- X=Z.
+
+
+head=X,head=Y:-head=merge(X,Y).
+R=merge([A|X],[B|Y]):-A=<B|R=[A|merge(X,[B|Y])].
+R=merge([],Y):-R=Y.R=merge(X,Y):-R=merge(Y,X).
+% head=X,head=Y:-h=X,h=Y,head=m.R=m,h=[A|X],h=[B|Y]:-A=<B|h=X,h=[B|Y],R=[A|m].h=X,h=[],R=m:-R=X
+% head=X,head=Y:-head=m,h=X,h=Y.h=[B|Y]\h=[A|X],R=m:-A=<B|h=X,R=[A|m].h=X,h=[],R=m:-R=X
+
+//ans=[].
+//head=[A|T1],head=[B|T2],'.'(m,X,Y) :- A =< B |head=T1,head=[B|T2],'.'(A,Z,ans).
+//head([]),head(X),ans(Z) :- '.'(X,Z,ans).
+
+//right=[1,2,3,4,5,6,7,8,9,10].
+
+
+// head=X, head=Y :- h=X, h=Y, head=m.

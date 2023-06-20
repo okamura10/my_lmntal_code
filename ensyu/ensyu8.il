@@ -1,0 +1,65 @@
+Compiled Ruleset @602 
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 19]
+        commit         ["_init", 0]
+        loadruleset    [0, @601]
+        newatom      [1, 0, 'a'_1]
+        newatom      [2, 0, 'b'_1]
+        newatom      [3, 0, 'c'_1]
+        newatom      [4, 0, 'd'_1]
+        newatom      [5, 0, 'i'_3]
+        newatom      [6, 0, 'i'_3]
+        newatom      [7, 0, 'i'_3]
+        newatom      [8, 0, 'i'_3]
+        newatom      [9, 0, 'i'_3]
+        newatom      [10, 0, 'i'_3]
+        newatom      [11, 0, 'i'_3]
+        newatom      [12, 0, 'i'_3]
+        newatom      [13, 0, 'i'_3]
+        newatom      [14, 0, 'i'_3]
+        newatom      [15, 0, 'w'_1]
+        newatom      [16, 0, 'x'_1]
+        newatom      [17, 0, 'y'_1]
+        newatom      [18, 0, 'z'_1]
+        newlink        [1, 0, 5, 0, 0]
+        newlink        [2, 0, 6, 0, 0]
+        newlink        [3, 0, 7, 0, 0]
+        newlink        [4, 0, 8, 0, 0]
+        newlink        [5, 1, 11, 0, 0]
+        newlink        [5, 2, 6, 2, 0]
+        newlink        [6, 1, 9, 0, 0]
+        newlink        [7, 1, 10, 0, 0]
+        newlink        [7, 2, 8, 2, 0]
+        newlink        [8, 1, 14, 0, 0]
+        newlink        [9, 1, 12, 0, 0]
+        newlink        [9, 2, 10, 2, 0]
+        newlink        [10, 1, 13, 0, 0]
+        newlink        [11, 1, 15, 0, 0]
+        newlink        [11, 2, 12, 2, 0]
+        newlink        [12, 1, 16, 0, 0]
+        newlink        [13, 1, 17, 0, 0]
+        newlink        [13, 2, 14, 2, 0]
+        newlink        [14, 1, 18, 0, 0]
+        proceed        []
+
+
+Compiled Ruleset @601 
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 3]
+        findatom     [1, 0, 'i'_3]
+        deref        [2, 1, 2, 2]
+        func           [2, 'i'_3]
+        commit         ["_iV1V", 0]
+        removeatom     [1, 0]
+        removeatom     [2, 0]
+        unify          [1, 0, 2, 1, 0]
+        unify          [1, 1, 2, 0, 0]
+        freeatom       [1]
+        freeatom       [2]
+        proceed        []
+
+
