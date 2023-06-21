@@ -4,8 +4,8 @@
 % node(field,left,right,count)
 
  main.
- main :- cliant([insert(50),insert(10),insert(230),insert(110),
-                insert(150),search(10),search(80),insert(220),
+ main :- cliant([select(20),insert(50),insert(10),insert(230),insert(110),
+                insert(150),search(1),search(80),insert(220),
                 insert(80),insert(130),insert(70)
                     |bst(node(100,node(20,z,z,1),z,2))]).
  
@@ -15,7 +15,7 @@
 
  '.'(insert(D),L,N), bst(B,L) :- N=bst(insert(B,D)).
  '.'(search(D),L,N), bst(B,L) :- N=bst(search(B,D)).
- '.'(select(D,!H),L,N), bst(B,L) :- N=bst(select(B,D,!H)). //D番目のキー（と要素）を取り出す
+ '.'(select(D),L,N), bst(B,L) :- N=bst(select(B,D)). //D番目のキー（と要素）を取り出す
 
 
  % (countの計算において、いったん)キーの衝突はないものとする
@@ -47,7 +47,7 @@
  B = search(node(F, L, R, C),D) :- D =:= F | B = node(F, L, R, C), succ(serch,D). 
  
  %選択
- B = select(z,D) :- B=z, fail(select,D). %末端
+ B = select(z,D) :- B=z, fail(select). %末端
  B = select(node(F, z, R, C),D) :- D =:= 0 ,ground(F)| B = node(F, z, R, C), succ(select,F). 
  B = select(node(F, z, R, C),D) :- D > 0 ,ND=D-1| B = node(F, z, select(R,ND), C). 
  B = select(node(F, z, R, C),D) :- D < 0 | B = node(F, select(z,D), R, C).
