@@ -7,9 +7,6 @@
 head(12,7).
 head(X,Y):- X<Y|true.
 
-
-
-
  
 %hashimotoさんB4日誌より
 % head(n(null, null, null)).
