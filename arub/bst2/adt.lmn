@@ -1,0 +1,57 @@
+% 二分探索木
+% count=各接点を根とする部分木の内部接点の総数
+% Deta Field Left Right Hyper (Return) Next
+% node(field,left,right,count)
+
+ main.
+ main :- cliant([insert(50),insert(10),insert(230),insert(110),
+                insert(150),search(10),search(80),insert(220),
+                insert(80),insert(130),insert(70)
+                    |bst(node(100,node(20,z,z,1),z,2))]).
+ 
+ % ステートビューワ見るための小さめのやつ。
+ %  main :- cliant([insert(9),insert(8),insert(6)
+ %                     |bst(node(10,node(2,z,z),z))]).
+
+ '.'(insert(D),L,N), bst(B,L) :- N=bst(insert(B,D)).
+ '.'(search(D),L,N), bst(B,L) :- N=bst(search(B,D)).
+ '.'(select(D,!H),L,N), bst(B,L) :- N=bst(select(B,D,!H)). //D番目のキー（と要素）を取り出す
+
+
+ % (countの計算において、いったん)キーの衝突はないものとする
+ %挿入
+ B = insert(z,D) :- B = node(D,z,z,1). %末端
+ B = insert(node(F, L, R, C),D) 
+    :- D < F, NC=C+1 | B = node(F, insert(L,D), R, NC, rotR). %右部分木
+ B = insert(node(F, L, R, C),D) 
+    :- D > F, NC=C+1 | B = node(F, L, insert(R,D), NC, rotL). %左部分木
+ B = insert(node(F, L, R, C),D) 
+    :- D =:= F | B = node(F, L, R, C),  fail(insert,D). %使用済み
+ 
+ % 根元に挿入するための回転操作
+ % (zから0を取り出すためにパターン分け,C2はfreeになるのでintチェック)
+ B = node(F, node(F2,z,R2,C2), R ,C,rotR) 
+    :- NC=C-1,int(C2)   |B=node(F2,z,node(F,R2,R,NC),C).
+ B = node(F, node(F2,node(F3,L3,R3,C3),R2,C2), R ,C,rotR) 
+    :- NC=C-1-C3,int(C2)|B=node(F2,node(F3,L3,R3,C3),node(F,R2,R,NC),C).
+ 
+ B = node(F, L, node(F2,L2,z,C2) ,C,rotL) 
+    :- NC=C-1,int(C2)   |B=node(F2,node(F,L,L2,NC),z,C).
+ B = node(F, L, node(F2,L2,node(F3,L3,R3,C3),C2) ,C,rotL) 
+    :- NC=C-1-C3,int(C2)|B=node(F2,node(F,L,L2,NC),node(F3,L3,R3,C3),C).
+ 
+ %検索
+ B = search(z,D) :- B=z, fail(search,D). %末端
+ B = search(node(F, L, R, C),D) :- D < F | B = node(F, search(L,D), R, C).    %右部分木
+ B = search(node(F, L, R, C),D) :- D > F | B = node(F, L, search(R,D), C).   %左部分木
+ B = search(node(F, L, R, C),D) :- D =:= F | B = node(F, L, R, C), succ(serch,D). 
+ 
+ %選択
+ B = select(z,D) :- B=z, fail(select,D). %末端
+ B = select(node(F, z, R, C),D) :- D =:= 0 ,ground(F)| B = node(F, z, R, C), succ(select,F). 
+ B = select(node(F, z, R, C),D) :- D > 0 ,ND=D-1| B = node(F, z, select(R,ND), C). 
+ B = select(node(F, z, R, C),D) :- D < 0 | B = node(F, select(z,D), R, C).
+ B = select(node(F, node(F1,L1,R1,C1), R, C),D) :- D =:= C1 ,ground(F)| B = node(F, node(F1,L1,R1,C1), R, C), succ(select,F). 
+ B = select(node(F, node(F1,L1,R1,C1), R, C),D) :- D > C1 ,ND = D-1-C1| B = node(F, node(F1,L1,R1,C1), select(R,ND), C). 
+ B = select(node(F, node(F1,L1,R1,C1), R, C),D) :- D < C1             | B = node(F, select(node(F1,L1,R1,C1),D), R, C). 
+ 
