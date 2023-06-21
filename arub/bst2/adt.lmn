@@ -1,0 +1,32 @@
+% 二分探索木
+% count=各接点を根とする部分木の内部接点の総数
+% Deta Field Left Right Hyper (Return) Next
+% node(field,left,right,count)
+ 
+ main.
+ main :- cliant([insert(50,!X),insert(10,!X),insert(230,!X),insert(110,!X),
+                insert(150,!X),search(10,!X),search(80,!X),insert(220,!X),
+                insert(80,!X),insert(130,!X),insert(70,!X)
+                    |bst(node(100,node(20,z,z,1),z,2))],!X).
+ 
+ % ステートビューワ見るための小さめのやつ。
+ %  main :- cliant([insert(9,!X),insert(8,!X),insert(6,!X)
+ %                     |bst(node(10,node(2,z,z),z))],!X).
+ 
+ B = insert(z,D,!H) :- B = node(D,z,z,1). %末端
+ B = insert(node(F, L, R, C),D,!H) :- D < F, NC=C+1 | B = node(F, insert(L,D,!H), R, NC, rotR).    %右部分木
+ B = insert(node(F, L, R, C),D,!H) :- D > F, NC=C+1 | B = node(F, L, insert(R,D,!H), NC, rotL).   %左部分木
+ B = insert(node(F, L, R, C),D,!H) :- D = F | B = node(F, L, R, C),  !H=fail(insert,D). %使用済み
+ 
+ % 根元に挿入するための回転操作
+ B = node(F, node(F2,L,R2,C2), R ,C,rotR) :- NC=C-1-C2|B=node(F2,L,node(F,R2,R,NC),C).
+ B = node(F, L, node(F2,L2,R,C2) ,C,rotL) :- NC=C-1-C2|B=node(F2,node(F,L,L2,NC),R,C).
+ 
+ B = search(z,D,!H) :- B=z,!H=fail(search,D). %末端
+ B = search(node(F, L, R, C),D,!H) :- D < F | B = node(F, search(L,D,!H), R, C).    %右部分木
+ B = search(node(F, L, R, C),D,!H) :- D > F | B = node(F, L, search(R,D,!H), C).   %左部分木
+ B = search(node(F, L, R, C),D,!H) :- D = F | B = node(F, L, R, C), !H=succ(serch,D). 
+ 
+ '.'(insert(D,!H),L,N), bst(B,L) :- N=bst(insert(B,D,!H)).
+ 
+ '.'(search(D,!H),L,N), bst(B,L) :- N=bst(search(B,D,!H)).
