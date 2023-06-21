@@ -4,7 +4,7 @@
 % node(field,left,right,count)
 
  main.
- main :- cliant([part(2),select(2),
+ main :- cliant([select(2),
                 insert(50),insert(10),insert(230),insert(110),
                 insert(150),search(1),search(80),insert(220),
                 insert(80),insert(130),insert(70)
