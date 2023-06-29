@@ -76,7 +76,7 @@
  B = delete(node(F, L, R, C),D) :- D < F, C2=C-1 | B = node(F, delete(L,D), R, C2).    %右部分木
  B = delete(node(F, L, R, C),D) :- D > F, C2=C-1 | B = node(F, L, delete(R,D), C2).   %左部分木
  B = delete(node(F, L, R, C),D) :- D =:= F, C2=C-1 | B = node(F, L, R, C2, delete).
- %消去部分
+ %消去する
  B = node(F, L, z, C, delete) :- int(C),int(F) | B = L.
  B = node(F, L, node(F2,z,R2,C2), C, delete) :- int(C2),int(F) |  B= node(F2,L,R2,C).
  B = node(F, L, node(F2,L2,R2,C2), C, delete) :- B = node(F, L, part(node(F2,L2,R2,C2),0), C, delete).  
