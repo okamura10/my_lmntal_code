@@ -1,0 +1,4 @@
+ main.
+ main :- cliant([part(0),select(0)
+                     |bst(node(10,node(2,z,z,1),z,2))]).
+
