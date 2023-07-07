@@ -1,0 +1,42 @@
+ main.
+ main :-  cliant([insert(5),insert(15),insert(1),
+                  insert(8),insert(7),insert(9)
+            |bst(node(10,node(2,z,z),z))]).
+
+%挿入
+ B = insert(z,D) :- B = node(D,z,z). %末端
+  %最初に左
+    B = insert(node(F, z, R),D)  %左ラスト
+        :- F > D| B=node(D,z,node(F,z,R)). %挿入&rotR
+    B = insert(node(F, node(LF,LL,LR), R),D)  %左左
+        % :- F < D, LF < D| B = node(F, node(LF,insert(LL,D),LR), R, rotRR). %素直に
+        :- F > D, LF > D| B = node(LF, insert(LL,D), node(F,LR,R), rotR). %先に一回目の回転やっておく
+    B = insert(node(F, node(LF,LL,LR), R),D)  %左右
+        :- F > D, D > LF| B =  node(F, node(LF,LL,insert(LR,D)), R, rotLR).
+  %最初に右
+    B = insert(node(F, L, z),D)  %右ラスト
+        :- D > F| B=node(D,node(F,L,z),z). %挿入&rotL
+    B = insert(node(F, L, node(RF,RL,RR)),D)  %右右
+        % :- D < F, D < LF| B =  node(F, L, node(RF,RL,insert(RR,D)), rotLL)  %素直に
+        :- D > F, D > RF| B =  node(RF, node(F,L,RL), insert(RR,D), rotL). %先に一回目の回転やっておく
+    B = insert(node(F, L, node(RF,RL,RR)),D)  %右左
+        :- D > F, RF > D| B =  node(F, L, node(RF,insert(RL,D),RR), rotRL).
+
+% 回転操作(rotR,rotL)
+ B = node(F, node(F2,z,R2), R ,rotR) 
+    :- B=node(F2,z,node(F,R2,R)).
+ B = node(F, node(F2,node(F3,L3,R3),R2), R ,rotR) 
+    :- B=node(F2,node(F3,L3,R3),node(F,R2,R)).
+ 
+ B = node(F, L, node(F2,L2,z) ,rotL) 
+    :- B=node(F2,node(F,L,L2),z).
+ B = node(F, L, node(F2,L2,node(F3,L3,R3)) ,rotL) 
+    :- B=node(F2,node(F,L,L2),node(F3,L3,R3)).
+% 回転操作(rotLR,rotRL)
+ B = node(F1,node(F2,L1,node(F3,L2,L3)),L4,rotLR)
+    :- B=node(F3,node(F2,L1,L2),node(F1,L3,L4)).
+ B = node(F1,L1,node(F2,node(F3,L2,L3),L4),rotRL)
+    :- B=node(F3,node(F1,L1,L2),node(F2,L3,L4)).
+
+
+ '.'(insert(K),L,N), bst(B,L) :- N=bst(insert(B,K)).

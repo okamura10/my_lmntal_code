@@ -3,30 +3,31 @@
 % Deta Field Left Right Hyper (Return) Next
 % node(field,left,right,count)
 
-%  main :- cliant([select(2),
+%  main :- cliant([part(5),select(5),
 %                 insert(50),insert(10),insert(230),insert(110),
 %                 insert(150),search(1),search(80),insert(220),
 %                 insert(80),insert(130),insert(70)
 %                     |bst(node(100,node(20,z,z,1),z,2))]).
  main.
- main :- cliant([select(2),
+ main :- cliant([delete(110)
                 |bst(node(50,node(10,z,node(20,z,z,1),2),
                              node(230,node(110,node(80,node(70,z,z,1),
                                                        node(100,z,z,1),3),
                                                node(150,node(130,z,z,1),
-                                                        node(220,z,z,1),3),7),z,8),11))])
+                                                        node(220,z,z,1),3),7),z,8),11))]).
  
  % ステートビューワ見るための小さめのやつ。
- %  main :- cliant([insert(9),insert(8),insert(6)
- %                     |bst(node(10,node(2,z,z),z))]).
+%   main :- cliant([part(0),select(0)
+%                      |bst(node(10,node(2,z,z,1),z,2))]).
 
- '.'(insert(D),L,N), bst(B,L) :- N=bst(insert(B,D)).
- '.'(search(D),L,N), bst(B,L) :- N=bst(search(B,D)).
+ '.'(insert(K),L,N), bst(B,L) :- N=bst(insert(B,K)).
+ '.'(search(K),L,N), bst(B,L) :- N=bst(search(B,K)).
  '.'(select(D),L,N), bst(B,L) :- N=bst(select(B,D)). //D番目のキー（と要素）を取り出す
- '.'(part(D),L,N),   bst(B,L) :- N=bst(part(B,D)).   //k番目の項目が根に来るように木を変形する
+ '.'(part(D),L,N),   bst(B,L) :- N=bst(part(B,D)).   //D番目の項目が根に来るように木を変形する
+ '.'(delete(K),L,N), bst(B,L) :- N=bst(delete(B,K)).
 
  % (countの計算において、いったん)キーの衝突はないものとする
- %挿入
+%挿入
  B = insert(z,D) :- B = node(D,z,z,1). %末端
  B = insert(node(F, L, R, C),D) 
     :- D < F, NC=C+1 | B = node(F, insert(L,D), R, NC, rotR). %右部分木
@@ -35,7 +36,7 @@
  B = insert(node(F, L, R, C),D) 
     :- D =:= F | B = node(F, L, R, C),  fail(insert,D). %使用済み
  
- % 根元に挿入するための回転操作
+% 根元に挿入するための回転操作
  % (zから0を取り出すためにパターン分け,C2はfreeになるのでintチェック)
  B = node(F, node(F2,z,R2,C2), R ,C,rotR) 
     :- NC=C-1,int(C2)   |B=node(F2,z,node(F,R2,R,NC),C).
@@ -47,13 +48,13 @@
  B = node(F, L, node(F2,L2,node(F3,L3,R3,C3),C2) ,C,rotL) 
     :- NC=C-1-C3,int(C2)|B=node(F2,node(F,L,L2,NC),node(F3,L3,R3,C3),C).
  
- %検索
+%検索
  B = search(z,D) :- B=z, fail(search,D). %末端
  B = search(node(F, L, R, C),D) :- D < F | B = node(F, search(L,D), R, C).    %右部分木
  B = search(node(F, L, R, C),D) :- D > F | B = node(F, L, search(R,D), C).   %左部分木
  B = search(node(F, L, R, C),D) :- D =:= F | B = node(F, L, R, C), succ(serch,D). 
  
- %選択
+%選択
  B = select(z,D) :- B=z, fail(select,D). %末端(Dは最初のDとは変わっている)
  B = select(node(F, z, R, C),D) :- D =:= 0 ,ground(F)| B = node(F, z, R, C), succ(select,F). 
  B = select(node(F, z, R, C),D) :- D > 0 ,ND=D-1| B = node(F, z, select(R,ND), C). 
@@ -62,10 +63,20 @@
  B = select(node(F, node(F1,L1,R1,C1), R, C),D) :- D > C1 ,ND = D-1-C1| B = node(F, node(F1,L1,R1,C1), select(R,ND), C). 
  B = select(node(F, node(F1,L1,R1,C1), R, C),D) :- D < C1             | B = node(F, select(node(F1,L1,R1,C1),D), R, C). 
  
- %分割
+%分割
  B = part(node(F, z, R, C),D) :- D =:= 0 ,ground(F)| B = node(F, z, R, C), succ(part,F). 
- B = part(node(F, z, R, C),D) :- D > 0 ,ND=D-1     | B = node(F, z, part(R,ND), C,rotR). 
- B = part(node(F, z, R, C),D) :- D < 0             | B = node(F, part(z,D), R, C ,rotL).
+ B = part(node(F, z, R, C),D) :- D > 0 ,ND=D-1     | B = node(F, z, part(R,ND), C,rotL). 
+ B = part(node(F, z, R, C),D) :- D < 0             | B = node(F, part(z,D), R, C ,rotR).
  B = part(node(F, node(F1,L1,R1,C1), R, C),D) :- D =:= C1 ,ground(F)| B = node(F, node(F1,L1,R1,C1), R, C), succ(part,F). 
- B = part(node(F, node(F1,L1,R1,C1), R, C),D) :- D > C1 ,ND = D-1-C1| B = node(F, node(F1,L1,R1,C1), part(R,ND), C,rotR). 
- B = part(node(F, node(F1,L1,R1,C1), R, C),D) :- D < C1             | B = node(F, part(node(F1,L1,R1,C1),D), R, C ,rotL). 
+ B = part(node(F, node(F1,L1,R1,C1), R, C),D) :- D > C1 ,ND = D-1-C1| B = node(F, node(F1,L1,R1,C1), part(R,ND), C,rotL). 
+ B = part(node(F, node(F1,L1,R1,C1), R, C),D) :- D < C1             | B = node(F, part(node(F1,L1,R1,C1),D), R, C ,rotR). 
+
+%消去（前半は検索,消去失敗時のカウント動作は例によって無視）
+ B = delete(z,D) :- B=z, delete(search,D). %末端
+ B = delete(node(F, L, R, C),D) :- D < F, C2=C-1 | B = node(F, delete(L,D), R, C2).    %右部分木
+ B = delete(node(F, L, R, C),D) :- D > F, C2=C-1 | B = node(F, L, delete(R,D), C2).   %左部分木
+ B = delete(node(F, L, R, C),D) :- D =:= F, C2=C-1 | B = node(F, L, R, C2, delete).
+ %消去する
+ B = node(F, L, z, C, delete) :- int(C),int(F) | B = L.
+ B = node(F, L, node(F2,z,R2,C2), C, delete) :- int(C2),int(F) |  B= node(F2,L,R2,C).
+ B = node(F, L, node(F2,L2,R2,C2), C, delete) :- B = node(F, L, part(node(F2,L2,R2,C2),0), C, delete).  
