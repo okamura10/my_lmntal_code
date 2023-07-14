@@ -29,7 +29,7 @@
  '.'(lessc(D),L,N), bst(B,L) :- N=bst(lessc(B,D)).
  B = lessc(node(F, L, R, C),D) :- D < F, NC=C-1 | B = node(F, lessc(L,D), R, NC). %右部分木
  B = lessc(node(F, L, R, C),D) :- D > F, NC=C-1 | B = node(F, L, lessc(R,D), NC). %左部分木
- B = lessc(node(F, L, R, C),D) :- D =:= F | B = node(F, L, R, C). %使用済み カウントを減らす処理完了
+ B = lessc(node(F, L, R, C),D) :- D =:= F | B = node(F, L, R, C),fail(insert,D). %使用済み カウントを減らす処理完了
 
 
 %  % 根元に挿入するための回転操作
