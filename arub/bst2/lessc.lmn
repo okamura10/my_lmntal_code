@@ -17,11 +17,9 @@
 
 % insert
  '.'(insert(D),L,N), bst(B,L) :- '.'(stop,L,N),bst(insert(B,D),L).
- B = insert(z,D) ,'.'(stop,L,N):- B = node(D,z,z,1),L=N. %末端 挿入成功でstopを消す
- B = insert(node(F, L, R, C),D) 
-    :- D < F, NC=C+1 | B = node(F, insert(L,D), R, NC). %右部分木
- B = insert(node(F, L, R, C),D) 
-    :- D > F, NC=C+1 | B = node(F, L, insert(R,D), NC). %左部分木
+ B = insert(z,D) ,'.'(stop,L,N) :- B = node(D,z,z,1),L=N. %末端 挿入成功でstopを消す
+ B = insert(node(F, L, R, C),D) :- D < F, NC=C+1 | B = node(F, insert(L,D), R, NC). %右部分木
+ B = insert(node(F, L, R, C),D) :- D > F, NC=C+1 | B = node(F, L, insert(R,D), NC). %左部分木
  B = insert(node(F, L, R, C),D) ,'.'(stop,Link,Next)
     :- D =:= F | B = node(F, L, R, C),  '.'(lessc(D),Link,Next). %使用済み 挿入失敗でstopをlesscountに変える
 
