@@ -7,7 +7,7 @@
  main.
  main :- cliant([insert(50),insert(10),insert(230),insert(110),
                 insert(150),search(10),search(80),insert(220),
-                insert(80),insert(130),insert(70)
+                insert(80),insert(130),insert(70),insert(10)
                     |bst(node(100,node(20,z,z,1),z,2))]).
 
 % ステートビューワ見るための小さめのやつ。
@@ -15,15 +15,15 @@
 %                     |bst(node(10,node(2,z,z),z))]).
 
 
-% (countの計算において、いったん)キーの衝突はないものとする
- '.'(insert(D),L,N), bst(B,L) :- N=bst(insert(B,D)).
- B = insert(z,D) :- B = node(D,z,z,1). %末端
+% insert
+ '.'(insert(D),L,N), bst(B,L) :- '.'(stop,L,N),bst(insert(B,D),L).
+ B = insert(z,D) ,'.'(stop,L,N):- B = node(D,z,z,1),L=N. %末端 挿入成功でstopを消す
  B = insert(node(F, L, R, C),D) 
     :- D < F, NC=C+1 | B = node(F, insert(L,D), R, NC). %右部分木
  B = insert(node(F, L, R, C),D) 
     :- D > F, NC=C+1 | B = node(F, L, insert(R,D), NC). %左部分木
- B = insert(node(F, L, R, C),D) 
-    :- D = F | B = node(F, L, R, C),  fail(insert,D). %使用済み
+ B = insert(node(F, L, R, C),D) ,'.'(stop,Link,Next)
+    :- D =:= F | B = node(F, L, R, C),  '.'(lessc(D),Link,Next). %使用済み 挿入失敗でstopをlesscountに変える
 
 %  % 根元に挿入するための回転操作
 %  % (zから0を取り出すためにパターン分け,C2はfreeになるのでintチェック)
