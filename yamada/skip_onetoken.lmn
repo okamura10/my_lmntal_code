@@ -1,0 +1,29 @@
+
+//yamadaさん日誌より
+//https://www.ueda.info.waseda.ac.jp/lmntal/local/index.php?k-yamada/M2%E6%97%A5%E8%AA%8C#n528b06e
+{
+ 	start.
+// 	rec(X,b(b(b(b(a(a(a(a(a(a(a(b(b(a(b(a(b(b(a(b(nil(L0)),L0,L1))),L1,L2)),L2,L3))),L3,L4),L4,L5),L5,L6),L6,L7),L7,L8),L8,L9),L9,X)))))).
+    rec(X,b(b(a(b(nil(L0)),L0,X)))).
+ 	
+ 	rec(A,B), start :- 
+ 		rec(RU1,RD1), goal(RETURN,RD2,RU2,RU1,RD1), token(RETURN,B,A,RU2,RD2).
+ 	
+ 	a(LD,LU,RU,RD), token(RETURN,RD,RU,RU2,RD2) :- 
+ 		a(RD,RU,RU2,RD2), token(RETURN,LD,LU,RU,RD).
+ 	b(LD,RD), token(RETURN,RD,RU,RU2,RD2) :- 
+ 		b(RD,RD2), token(RETURN,LD,RU,RU2,RD).
+ 	
+ 	nil(RU,RD), token(RETURN,RD,RU,RU2,RD2), goal(RETURN,A,B,C,D) :-
+ 		nil(RU2,RD2), ok(A,B,C,D).
+ }.
+ goal@@
+ {rec(A,B), ok(D,U,A,B), $p[D,U], @p} :- ok.
+
+//s(rec,end).
+//
+//  s(R1,R2) :- a(L2,L1,R1,R2), s(L1,L2).
+//  s(R1,R2) :- b(L,R2), s(R1,L).
+//  s(R1,R2) :- nil(R1,R2).
+
+

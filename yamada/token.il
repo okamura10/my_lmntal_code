@@ -1,0 +1,178 @@
+Compiled Ruleset @602 
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 1]
+        jump           [L127, [0], [], []]
+    --body:L127:
+        spec           [1, 16]
+        commit         ["_init", 0]
+        loadruleset    [0, @601]
+        newatom      [1, 0, 'head'_1]
+        newatom      [2, 0, 'down'_2]
+        newatom      [3, 0, 'plus'_3]
+        newatom      [4, 0, 'plus'_3]
+        newatom      [5, 0, 1_1]
+        newatom      [6, 0, 'plus'_3]
+        newatom      [7, 0, 2_1]
+        newatom      [8, 0, 3_1]
+        newatom      [9, 0, 'plus'_3]
+        newatom      [10, 0, 'plus'_3]
+        newatom      [11, 0, 4_1]
+        newatom      [12, 0, 5_1]
+        newatom      [13, 0, 'plus'_3]
+        newatom      [14, 0, 6_1]
+        newatom      [15, 0, 7_1]
+        newlink        [1, 0, 2, 1, 0]
+        newlink        [2, 0, 3, 2, 0]
+        newlink        [3, 0, 4, 2, 0]
+        newlink        [3, 1, 9, 2, 0]
+        newlink        [4, 0, 5, 0, 0]
+        newlink        [4, 1, 6, 2, 0]
+        newlink        [6, 0, 7, 0, 0]
+        newlink        [6, 1, 8, 0, 0]
+        newlink        [9, 0, 10, 2, 0]
+        newlink        [9, 1, 13, 2, 0]
+        newlink        [10, 0, 11, 0, 0]
+        newlink        [10, 1, 12, 0, 0]
+        newlink        [13, 0, 14, 0, 0]
+        newlink        [13, 1, 15, 0, 0]
+        proceed        []
+
+
+Compiled Ruleset @601     
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 3]
+        findatom     [1, 0, 'down'_2]
+        derefatom    [2, 1, 0]
+        isint          [2]
+        jump           [L102, [0], [1, 2], []]
+    --body:L102:
+        spec           [3, 5]
+        commit         ["_Adow", 0]
+        removeatom     [1, 0]
+        removeatom     [2, 0]
+        copyatom     [3, 0, 2]
+        newatom      [4, 0, 'up'_2]
+        newlink        [4, 0, 3, 0, 0]
+        relink         [4, 1, 1, 1, 0]
+        freeatom       [1]
+        freeatom       [2]
+        proceed        []
+
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 3]
+        findatom     [1, 0, 'down'_2]
+        deref        [2, 1, 0, 2]
+        func           [2, 'plus'_3]
+        jump           [L107, [0], [1, 2], []]
+    --body:L107:
+        spec           [3, 5]
+        commit         ["_Adow", 0]
+        removeatom     [1, 0]
+        removeatom     [2, 0]
+        newatom      [3, 0, 'plus'_3]
+        newatom      [4, 0, 'down'_2]
+        newlink        [3, 0, 4, 1, 0]
+        relink         [3, 1, 2, 1, 0]
+        relink         [3, 2, 1, 1, 0]
+        relink         [4, 0, 2, 0, 0]
+        freeatom       [1]
+        freeatom       [2]
+        proceed        []
+
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 4]
+        findatom     [1, 0, 'plus'_3]
+        deref        [2, 1, 0, 1]
+        func           [2, 'up'_2]
+        derefatom    [3, 2, 0]
+        isint          [3]
+        jump           [L112, [0], [1, 2, 3], []]
+    --body:L112:
+        spec           [4, 7]
+        commit         ["_Aplu", 0]
+        removeatom     [1, 0]
+        removeatom     [2, 0]
+        removeatom     [3, 0]
+        copyatom     [4, 0, 3]
+        newatom      [5, 0, 'plus'_3]
+        newatom      [6, 0, 'down'_2]
+        newlink        [5, 0, 4, 0, 0]
+        newlink        [5, 1, 6, 1, 0]
+        relink         [5, 2, 1, 2, 0]
+        relink         [6, 0, 1, 1, 0]
+        freeatom       [1]
+        freeatom       [2]
+        freeatom       [3]
+        proceed        []
+
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 4]
+        findatom     [1, 0, 'plus'_3]
+        deref        [2, 1, 1, 1]
+        func           [2, 'up'_2]
+        derefatom    [3, 2, 0]
+        isint          [3]
+        jump           [L117, [0], [1, 2, 3], []]
+    --body:L117:
+        spec           [4, 7]
+        commit         ["_Aplu", 0]
+        removeatom     [1, 0]
+        removeatom     [2, 0]
+        removeatom     [3, 0]
+        copyatom     [4, 0, 3]
+        newatom      [5, 0, 'up'_2]
+        newatom      [6, 0, 'plus'_3]
+        newlink        [5, 0, 6, 2, 0]
+        relink         [5, 1, 1, 2, 0]
+        relink         [6, 0, 1, 0, 0]
+        newlink        [6, 1, 4, 0, 0]
+        freeatom       [1]
+        freeatom       [2]
+        freeatom       [3]
+        proceed        []
+
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 8]
+        findatom     [1, 0, 'up'_2]
+        deref        [2, 1, 0, 2]
+        func           [2, 'plus'_3]
+        derefatom    [3, 2, 0]
+        derefatom    [4, 2, 1]
+        isint          [3]
+        isint          [4]
+        iadd         [5, 3, 4]
+        getfunc      [6, 5]
+        allocatomindirect[7, 6]
+        jump           [L122, [0], [1, 2, 3, 4, 5, 7], []]
+    --body:L122:
+        spec           [7, 9]
+        commit         ["_Aupp", 0]
+        removeatom     [1, 0]
+        removeatom     [2, 0]
+        removeatom     [3, 0]
+        removeatom     [4, 0]
+        copyatom     [7, 0, 6]
+        newatom      [8, 0, 'up'_2]
+        newlink        [8, 0, 7, 0, 0]
+        relink         [8, 1, 1, 1, 0]
+        freeatom       [1]
+        freeatom       [2]
+        freeatom       [3]
+        freeatom       [4]
+        freeatom       [6]
+        freeatom       [5]
+        proceed        []
+
+

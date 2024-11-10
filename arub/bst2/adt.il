@@ -20,7 +20,7 @@ Compiled Rule
         newatom      [2, 0, 'cliant'_1]
         newatom      [3, 0, '.'_3]
         newatom      [4, 0, 'delete'_2]
-        newatom      [5, 0, 230_1]
+        newatom      [5, 0, 110_1]
         newatom      [6, 0, 'bst'_2]
         newatom      [7, 0, 'node'_5]
         newatom      [8, 0, 50_1]

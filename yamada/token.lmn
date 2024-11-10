@@ -1,0 +1,16 @@
+
+
+head=down(B),
+B=plus(C1,C2),C1=plus(1,C3),C3=plus(2,3),
+C2=plus(C4,C5),C4=plus(4,5),C5=plus(6,7).
+
+// A=plus(PA,PB) :- int(PA),int(PB),PC=PA+PB|A=PC.
+
+// tokenが歩き回って計算を進める
+// 単に実行順序が一意に定められるだけ、状態数が多い
+A=down(N):- int(N) | A=up(N).
+A=down(plus(PA,PB)):- A=plus(down(PA),PB).
+A=plus(up(PA),PB) :- int(PA)|A = plus(PA,down(PB)).
+A=plus(PA,up(PB)) :- int(PB)|A=up(plus(PA,PB)).
+A=up(plus(PA,PB)) :- PC=PA+PB|A=up(PC).
+

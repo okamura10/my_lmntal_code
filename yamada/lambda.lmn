@@ -1,0 +1,72 @@
+/*
+type(term(R)) = {
+  R = lambda(A, B) :- term(A), term(B).
+  R = apply(A, B) :- term(A), term(B).
+  R = cp(A, B) :- term(A), term(B).
+}.
+
+type(interface(R)) = {
+  R = cp_arg(A, B, C) :- .
+  R = dp_arg(A, B, C) :- .
+  R = cp_fin :- .
+  R = dp_fin(A, B, C, D) :- .
+}.
+*/
+
+  init(r).
+
+//  init(R) :-
+//    R=dn(apply(lambda(cp(Y0,Y1), apply(Y0,Y1)), lambda(X,X))).
+  R = two :- R = lambda(cp(X0, X1), lambda(Y, apply(X0, apply(X1, Y)))).
+  R = thr :- R = lambda(cp(X0, cp(X1, X2)), lambda(Y, apply(X0, apply(X1, apply(X2, Y))))).
+  R = id :- R = lambda(X, X).
+  
+  init(R) :-
+    R = dn(apply(apply(apply(thr, two), id), id)).
+
+  R = apply(up(lambda(A, B)), C) :- R = dn(B), A = C.
+
+
+  R = dn(lambda(A, B)) :- R = up(lambda(A, B)).
+
+  R = dn(apply(A, B)) :- R = apply(dn(A), B).
+
+  R = dn(P), cp(P, Q, X) :-
+    act_cp(cp_arg(X, P, Q)), R = dn(P).
+  R = dn(Q), cp(P, Q, X) :-
+    act_cp(cp_arg(X, P, Q)), R = dn(Q).
+
+
+  act_cp(cp_arg(lambda(A, B), Ra, Rb)) :-
+    Ra = lambda(A1, B1), Rb = lambda(A2, B2), act_dp(dp_arg(A, A1, A2)), act_dp(dp_arg(B, B1, B2)).
+  act_cp(cp_arg(apply(A, B), Ra, Rb)) :-
+    Ra = apply(A1, B1), Rb = apply(A2, B2), act_cp(cp_arg(A, A1, A2)), act_cp(cp_arg(B, B1, B2)).
+  act_cp(cp_arg(X, Ra, Rb)), R = lambda(X, B) :-
+    R = lambda(cp(Ra, Rb), B).
+  act_cp(cp_arg(X, Ra, Rb)), R = cp(X, B) :-
+    R = cp(cp(Ra, Rb), B).
+  act_cp(cp_arg(X, Ra, Rb)), R = cp(A, X) :-
+    R = cp(A, cp(Ra, Rb)).
+  act_cp(cp_arg(B1, A1, A2)), R = cp_arg(B, B1, B2) :-
+    B1 = cp(A1, A2), R = cp_arg(B, B1, B2).
+  act_cp(cp_arg(B2, A1, A2)), R = cp_arg(B, B1, B2) :-
+    B2 = cp(A1, A2), R = cp_arg(B, B1, B2).
+  act_cp(cp_fin) :-
+    .
+
+
+  act_dp(dp_arg(lambda(A, B), Ra, Rb)) :-
+    Ra = lambda(A1, B1), Rb = lambda(A2, B2), act_dp(dp_arg(A, A1, A2)), act_dp(dp_arg(B, B1, B2)).
+  act_dp(dp_arg(apply(A, B), Ra, Rb)) :-
+    Ra = apply(A1, B1), Rb = apply(A2, B2), act_dp(dp_arg(A, A1, A2)), act_dp(dp_arg(B, B1, B2)).
+  act_dp(dp_arg(cp(A, B), C, D)) :-
+    act_dp(dp_arg(A, A1, A2)), act_dp(dp_arg(B, B1, B2)),
+    act_cp(cp_arg(C, A1, B1)), act_cp(cp_arg(D, A2, B2)).
+  act_dp(dp_arg(X, C, D)), cp_arg(X, A, B, R) :-
+    R = cp_fin,
+    act_dp(dp_arg(A, A1, A2)), act_dp(dp_arg(B, B1, B2)),
+    act_cp(cp_arg(C, A1, B1)), act_cp(cp_arg(D, A2, B2)).
+  act_dp(dp_arg(X, Ra, Rb)), dp_arg(X, C, D, R) :-
+    R = dp_fin(Ra, Rb, C, D).
+  act_dp(dp_fin(A, B, Ra, Rb)) :-
+    Ra = A, Rb = B.

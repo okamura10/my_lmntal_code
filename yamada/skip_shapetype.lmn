@@ -1,0 +1,10 @@
+{
+ //検査したいグラフ
+ a(b(b(a(a(nil(L0),L0,L1),L1,L2))),L2,"R1","R2").
+
+ rev1@@ nil(R1,R2) :- skiplist(R1,R2).
+ rev2@@ a(LINK1,LINK2,R1,R2), skiplist(LINK2,LINK1)
+ :- skiplist(R1,R2).
+rev3@@ b(LINK,R2), skiplist(R1,LINK) :- skiplist(R1,R2).
+}.
+goal@@ {skiplist(R1,R2), @p} :- string(R1), string(R2) | ok.

@@ -1,0 +1,35 @@
+/*n(7.0), n(2.0), n(2.0), n(5.0).
+n(A), n(B) :- C = A +. B | n(C), t.
+n(A), n(B) :- A >=. B, C = A -. B | n(C), t.
+n(A), n(B) :- C = A *. B | n(C), t.
+n(A), n(B) :- B =\=. 0.0, C = A /. B | n(C), t.
+t, t, t, n(N) :- N =\=. 10.0 | fail.
+t, t, t, n(N) :- N =:=. 10.0 | succ.
+
+
+n=20, n=8,n=1000.
+n=M, n=N :- M>N | n=M-N, n=N.
+n=M, n=N :- M<N | n=M, n=N-M.
+*/
+
+bst(node(10,"10th",node(2,"2nd",z,z),z)).
+a(1,2,3).
+%a={n(integer.set(1,5), integer.set(1,5))}.
+%root(a),root(b).
+% edge(0,1),edge(1,2),edge(2,3).
+% edge(A,B1), edge(B2,C) \:- B1=:=B2, int(A), int(C), uniq(A,B1,C) | edge(A,C).
+%root-a,root-b
+%root - a - b
+%root(a),root(b) :- root(a(b)).
+
+% root(node(1)).root(node(2)).
+
+%  main.
+%  main :- ll=[a(1,!Y,2)].
+%  b(!X),b(!X):-c(!X).
+%  c(!X):-.
+%  a(!X) :- b(!X),a(!X).
+
+
+
+

@@ -1,0 +1,40 @@
+// defshape s(R1,R2){
+// s(R1,R2) :- nil(R1,R2).
+// s(R1,R2) :- a(L2,L1,R1,R2), s(L1,L2).
+// s(R1,R2) :- b(L,R2), s(R1,L).
+// }
+
+{
+ start.
+ /* input graph */
+//head(X,b(b(b(b(a(a(a(a(a(a(a(b(b(a(b(a(b(b(a(b(nil(L0)),L0,L1))),L1,L2)),L2,L3))),L3,L4),L4,L5),L5,L6),L6,L7),L7,L8),L8,L9),L9,X)))))).
+  head(X,b(b(a(b(nil(L0)),L0,X)))).
+
+ initialize @@
+ start, head(INP_1,INP_2) :-
+ head(HD_GL_1, HD_GL_2),
+ goal(GL_TKN_1, GL_TKN_2, RTN, HD_GL_1, HD_GL_2),
+ token(INP_1, INP_2, end, RTN, GL_TKN_1, GL_TKN_2).
+
+ rule1 @@
+ token(TKN_A_1, TKN_A_2, end, RTN, R1, R2),
+ a(N1, N2, TKN_A_1, TKN_A_2) :-
+ a(A_TKN_1, A_TKN_2, R1, R2),
+ token(N2, N1, end, RTN, A_TKN_2, A_TKN_1).
+
+ rule2 @@
+ token(N2, TKN_B, end, RTN, R1, R2), b(N1, TKN_B) :-
+ b(B_TKN, R2), token(N2, N1, end, RTN, R1, B_TKN).
+
+ rule3 @@
+ token(TKN_N_1, TKN_N_2, end, RTN, R1, R2),
+ nil(TKN_N_1, TKN_N_2) :-
+ nil(R1, R2), RTN = end.
+ }.
+
+ goal @@
+ {
+ head(HD_GL_1, HD_GL_2),
+ goal(INP_1, INP_2, end, HD_GL_1, HD_GL_2),
+ $p[INP_1,INP_2], @p
+ } :- ok.

@@ -1,0 +1,26 @@
+% rule1@@
+% finalize_vars([]) :- .
+% rule2@@
+% finalize_vars([Name-var(/*_,*/__,/*Kind,*/Occur)|T]) :- 
+%         Occur=1, ground/*unary*/(Name), /*ground(_),*/ int(__) |
+%         /*Kind=void,*/ finalize_vars(T).
+% rule3@@
+% finalize_vars([_Name-var(/*_,*/__,/*Kind,*/Occur)|T]) :-
+%         Occur>1, ground/*unary*/(_Name), /*ground(_),*/ int(__) |
+%         /*Kind=normal,*/ finalize_vars(T).
+
+
+//a("C"),b(9).
+//a(N),b(B) :- ground(N), B=9 | ng.
+//a(N),b(B) :- ground(N), B=:=9| ok. 
+//a(N),b(9) :- ground(N)| ok. 
+//a(N) :- ground(N) | ok. b(B) :- B=9| ok.
+
+//g(X).h(X).
+//g(X),h(Y) :- ground(X) |ok(Y).
+
+f("A"-9).
+f(A-9) :- ground(A), B=9 | ng.
+//f(A-B) :- ground(A), B=:=9 | ok.
+//f(A-9) :- ground(A) | ok.
+//f(A-B) :- ground(A) | ok(B).

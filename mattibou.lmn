@@ -1,0 +1,15 @@
+p(1,1,kougeki).p(1,1,bougyo).
+
+p(L1,R1,kougeki),p(L2,R2,bougyo) :- N=((L1+L2) mod 5),N=\=0 | p(L1,R1,bougyo),p(N,R2,kougeki).
+p(L1,R1,kougeki),p(L2,R2,bougyo) :- N=((L1+R2) mod 5),N=\=0 | p(L1,R1,bougyo),p(L2,N,kougeki).
+p(L1,R1,kougeki),p(L2,R2,bougyo) :- N=((R1+L2) mod 5),N=\=0 | p(L1,R1,bougyo),p(N,R2,kougeki).
+p(L1,R1,kougeki),p(L2,R2,bougyo) :- N=((R1+R2) mod 5),N=\=0 | p(L1,R1,bougyo),p(L2,N,kougeki).
+
+p(L1,R1,kougeki),p(L2,R2,bougyo) :- N=((L1+L2) mod 5),N=:=0 | p(L1,R1,bougyo),p(N,R2,kougeki,check).
+p(L1,R1,kougeki),p(L2,R2,bougyo) :- N=((L1+R2) mod 5),N=:=0 | p(L1,R1,bougyo),p(L2,N,kougeki,check).
+p(L1,R1,kougeki),p(L2,R2,bougyo) :- N=((R1+L2) mod 5),N=:=0 | p(L1,R1,bougyo),p(N,R2,kougeki,check).
+p(L1,R1,kougeki),p(L2,R2,bougyo) :- N=((R1+R2) mod 5),N=:=0 | p(L1,R1,bougyo),p(L2,N,kougeki,check).
+
+p(L,R,kougeki,check) :- L=:=0,R=:=0 | lose.
+p(L,R,kougeki,check) :- L=\=0 | p(L,R,kougeki).
+p(L,R,kougeki,check) :- R=\=0 | p(L,R,kougeki).

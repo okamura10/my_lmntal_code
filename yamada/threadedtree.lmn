@@ -1,0 +1,29 @@
+{
+ start.
+ /* input graph */
+
+
+ initialize @@
+ start, head(INP_L, INP_R, INP_T) :-
+ head(HG_L, HG_R, HG_T),
+ goal(GT_L, GT_R, GT_T, RTN, HG_L, HG_R, HG_T),
+ token(INP_L, INP_R, INP_T, end, RTN, GT_L, GT_R, GT_T).
+
+rule1 @@
+token(LEFT, RIGHT, TN, end, RTN1, RT_L, RT_R, RT_T),
+n(L2, L1, R1, R2, TN) :-
+n(NLT_R, NLT_T, NRT_T, NRT_L, RT_T),
+token(LEFT, L2, L1, end, RTN2, RT_L, NLT_R, NLT_T),
+token(R2, RIGHT, R1, RTN2, RTN1, NRT_L, RT_R, NRT_T).
+rule2 @@
+token(LEFT, RIGHT, TL, end, RTN, RT_L, RT_R, RT_T),
+l(LEFT, RIGHT, TL) :-
+n(RT_L, RT_R, RT_T), RTN = end.
+}.
+
+goal @@
+{
+head(HG_L, HG_R, HG_T),
+goal(INP_L, INP_R, INP_T, end, HG_L, HG_R, HG_T),
+$p[INP_L, INP_R, INP_T], @p
+} :- ok.
