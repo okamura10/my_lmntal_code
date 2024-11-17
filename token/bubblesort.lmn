@@ -1,0 +1,24 @@
+% Nondeterministic Bubblesort
+% res=[3,1,7,0,5,4,2].
+% r=[9,6,2,7,1,4,10,8,5,3].
+
+% token([3,1,7,0,5,4,2],h).
+// もとの命令
+//L=[$x,$y|L2] :- $x > $y | L=[$y,$x|L2].
+//L=[$x,$y|L2] :- $x > $y | L=[$y|L3],L3=[$x|L2].
+
+// トークンが必要個数元からつながっている場合の命令
+A=token(L),L=[$x|L2],L2='[]' :- int($x)|A=[$x|L3],L3='[]'.
+A=token(L),L=[$x,$y|L2] :- $x > $y | A=[$y|L3],L3=token(L4),L4=[$x|L2].
+A=token(L),L=[$x,$y|L2] :- $x =< $y | A=[$x|L3],L3=token(L4),L4=[$y|L2].
+
+
+// トークンを必要個数流すタイプ(帰還用リンク使用)
+start(0,[3,1,7,0,5,4,2],h).
+A=start(C,L),L=[$x|L2] :- NC=C+1,int($x)|A=start(Re,NC,L),L=token(Re,0,L1),L1=[$x|L2] .
+A=token(Re,C,L),L=[$x|L2],L2='[]',S=start(Re,SC,Ls), 
+:- int($x) ,int(C),int(SC), C > SC |A=[$x|L3],L3='[]',S=start(SC,Ls).
+A=token(Re,C,L),L=[$x|L2],L2='[]',S=start(Re,SC,Ls), 
+:- int($x) ,int(C),int(SC), C =< SC |A=[$x|L3],L3='[]',S=Ls.
+A=token(Re,C,L),L=[$x,$y|L2] :- $x > $y ,NC=C+1| A=[$y|L3],L3=token(Re,NC,L4),L4=[$x|L2].
+A=token(Re,C,L),L=[$x,$y|L2] :- $x =< $y, NC=C+1 | A=[$x|L3],L3=token(Re,NC,L4),L4=[$y|L2].
