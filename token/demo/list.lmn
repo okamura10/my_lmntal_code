@@ -1,0 +1,44 @@
+% List permutation a la Prolog
+% Nondeterministic execution computes all solutions.
+
+% choose(X, [Y|L0],L1) :- L1=[Y|L], choose(X,L0,L).
+% choose(X0,[X|L], L0) :- X0=X, L0=L.
+
+//i1@@ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
+//i2@@ins(X,L0,L ) :- L=[X|L0].
+//
+//p1@@perm([],L) :- L=[].
+//p2@@perm([X|L0],L) :- perm(L0,L1), ins(X,L1,L).
+
+% choose(X,[a,b,c],Y), result(X,Y).
+
+% perm([a,b,c],L), result(L).
+
+% result(ins(a,ins(b,ins(c,[])))). 
+
+% ins(a,[b,c,d],res).
+
+% // この問題本質的にはここだけ
+% ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
+% ins(X,L0,L ) :- L=[X|L0].
+% result(ins(a,ins(b,ins(c,[])))). 
+
+perm([a,b,c],L), result(L).
+
+L=ptoken([],R), R=perm(A,B):- L=[],A=B.
+L=ptoken([X|L0],R) :- L1=ptoken(L0,R), ins(X,L1,L).
+perm([X|L0],L) :- perm(ptoken([X|L0],R),L,R).
+
+//L=ptoken([],R), R=perm(A,B):- L=[],A=B.
+//L=ptoken([X|L0],R) :- L1=ptoken(L0,R), ins(X,L1,L).
+//perm([X|L0],L) :- perm(ptoken([X|L0],R),L,R).
+//
+//result(ins(A,N)):- result(token(ins(A,N),R,0),R).
+//result('.'(A,N)):- result(token('.'(A,N),R,0),R).
+//
+//L=token(ins(X,[Y|L0]),R,C) :-int(C),NC=C+1| L=[Y|L2],L2=token(ins(X,L0),R,NC).
+//L=token(ins(X,L0),R,C) :-int(C),NC=C+1|  L=[X|L1],L1=token(L0,R,NC).
+//L=token(ins(X,L0),R,C) :-int(C),NC=C+1|  L=ins(X,L1),L1=token(L0,R,NC).
+//L=token("."(X,L0),R,C) :-int(C),NC=C+1|  L="."(X,L1),L1=token(L0,R,C).
+//L=token([],R,C), result(A,R):-int(C),C=:=0| L=[],result(A).
+//L=token([],R,C), result(A,R):-int(C),C > 0| L=[],result(token(A,R,0),R).
