@@ -1,0 +1,78 @@
+% // 1 わりと脳死でいける
+
+answer("<-"(L)) :- answer(L).
+Ys=[A|"<-"(Xs)] :- Ys="<-"([A|Xs]).
+
+Ns="->"(gen($n,$max)) :- $n > $max | Ns="<-"([]).
+Ns="->"(gen($n,$max)) :- $n =<$max, $n1=$n+1 |
+    Ns=[$n|Ns1], N1=$n1, Ns1="->"(gen(N1,$max)).
+
+Zs=sift($max,"<-"([])) :- int($max) | Zs="<-"([]).
+Zs=sift($max,"<-"([$p|Xs])) :- $p*$p<$max  |
+    Zs=[$p|Zs1], Ys=(filter($p,"->"(Xs))), Zs1=sift($max,Ys).
+Zs=sift($max,"<-"([$p|Xs])) :- $p*$p>=$max |
+    Zs=[$p|Zs1], Zs1=sift($max,"<-"(Xs)).
+
+Ys=filter($p,"->"([])) :- int($p) | Ys="<-"([]).
+Ys=filter($p,"->"([$x|Xs])) :- $x mod $p=:=0 | Ys=filter($p,"->"(Xs)).
+Ys=filter($p,"->"([$x|Xs])) :- $x mod $p=\=0 |
+    Ys=[$x|Ys1], Ys1=filter($p,"->"(Xs)).
+
+primes($max,Ps) :- int($max) |
+    Ns="->"(gen(2,$max)), Ps=sift($max,Ns).
+
+primes(100,answer).
+
+% % ver1
+% % // 1 わりと脳死でいける。(アトムに"->"くっつけてる)
+
+% answer("<-"(L)) :- answer(L).
+% Ys=[A|"<-"(Xs)] :- Ys="<-"([A|Xs]).
+% B=sift(A,"<-"(Ns)) :- B="->"(sift(A,Ns)).
+
+% Ns="->"(gen($n,$max)) :- $n > $max | Ns="<-"([]).
+% Ns="->"(gen($n,$max)) :- $n =<$max, $n1=$n+1 |
+%     Ns=[$n|Ns1], N1=$n1, Ns1="->"(gen(N1,$max)).
+
+% Zs="->"(sift($max,[])) :- int($max) | Zs="<-"([]).
+% Zs="->"(sift($max,[$p|Xs])) :- $p*$p<$max  |
+%     Zs=[$p|Zs1], Zs1=sift($max,Ys), Ys=filter($p,"->"(Xs)).
+% Zs="->"(sift($max,[$p|Xs])) :- $p*$p>=$max |
+%     Zs=[$p|Zs1], Zs1="->"(sift($max,Xs)).
+
+% Ys=filter($p,"->"([])) :- int($p) | Ys="<-"([]).
+% Ys=filter($p,"->"([$x|Xs])) :- $x mod $p=:=0 | Ys=filter($p,"->"(Xs)).
+% Ys=filter($p,"->"([$x|Xs])) :- $x mod $p=\=0 |
+%     Ys=[$x|Ys1], Ys1=filter($p,"->"(Xs)).
+
+% "->"(primes($max,Ps)) :- int($max) |
+%     Ns="->"(gen(2,$max)), Ps=sift($max,Ns).
+
+% "->"(primes(10,answer)).
+
+% // 1 わりと脳死でいける。(アトムに"->"くっつけてる)
+% answer("<-"(A)) :- answer=A.
+% L1=[X|L2],L2="<-"(L3) :- L1="<-"(L4),L4=[X|L3].
+% gen(A,B,"<-"(Ns)) :- "->"(gen(A,B,Ns)).
+% sift(A,"<-"(Ns),B) :- "->"(sift(A,Ns,B)).
+% filter(A,B,"<-"(Ns)) :- "->"(filter(A,B,Ns)).
+
+% "->"(gen($n,$max,Ns)) :- $n > $max | Ns="<-"([]).
+% "->"(gen($n,$max,Ns)) :- $n =<$max |
+%     Ns=[$n|Ns1], N1=$n+1, "->"(gen(N1,$max,Ns1)).
+
+% "->"(sift($max,[],Zs)) :- int($max) | Zs="<-"([]).
+% "->"(sift($max,[$p|Xs],Zs)) :- $p*$p<$max  |
+%     Zs=[$p|Zs1], "->"(filter($p,Xs,Ys)), sift($max,Ys,Zs1).
+% "->"(sift($max,[$p|Xs],Zs)) :- $p*$p>=$max |
+%     Zs=[$p|Zs1], "->"(sift($max,Xs,Zs1)).
+
+% "->"(filter($p,[],Ys)) :- int($p) | Ys="<-"([]).
+% "->"(filter($p,[$x|Xs],Ys)) :- $x mod $p=:=0 | "->"(filter($p,Xs,Ys)).
+% "->"(filter($p,[$x|Xs],Ys)) :- $x mod $p=\=0 |
+%     Ys=[$x|Ys1], "->"(filter($p,Xs,Ys1)).
+
+% "->"(primes($max,Ps)) :- int($max) |
+%     "->"(gen(2,$max,Ns)), sift($max,Ns,Ps).
+
+% "->"(primes(5,answer)).

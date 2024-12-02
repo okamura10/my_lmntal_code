@@ -1,0 +1,27 @@
+// 関数をtokenぽく見る
+// あんまりtokenぽくない
+
+//3917
+
+// これ(genだけ先に終わらせる)で381
+gen(A,B,Ns) :- Ns=gStart(L,R),gToken(A,B,L,R).
+gToken($n,$max,Ns,R),A=gStart(B,R) :- $n > $max | Ns=[],A=B.
+gToken($n,$max,Ns,R) :- $n =<$max |
+    Ns=[$n|Ns1], N1=$n+1, gToken(N1,$max,Ns1,R).
+//
+//// shiftから生成したフィルタが消えるまでshift遷移しない、で1本道
+sift($max,[],Zs) :- int($max) | Zs=[].
+sift($max,[$p|Xs],Zs) :- $p*$p<$max  |
+    Zs=[$p|Zs1], filter($p,Xs,Ys,R), sift($max,Ys,Zs1,R).
+sift($max,[$p|Xs],Zs) :- $p*$p>=$max |
+    Zs=[$p|Zs1], sift($max,Xs,Zs1).
+
+filter($p,[],Ys,R), sift(A,B,C,R):- int($p) | Ys=[],sift(A,B,C).
+filter($p,[$x|Xs],Ys,R) :- $x mod $p=:=0 | filter($p,Xs,Ys,R).
+filter($p,[$x|Xs],Ys,R) :- $x mod $p=\=0 |
+    Ys=[$x|Ys1], filter($p,Xs,Ys1,R).
+
+primes($max,Ps) :- int($max) |
+    gen(2,$max,Ns), sift($max,Ns,Ps).
+
+primes(10,answer).

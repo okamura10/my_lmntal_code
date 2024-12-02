@@ -1,0 +1,28 @@
+% // 2 先に結果出す
+
+answer("<-"(L)) :- answer(L).
+Ys=[A|"<-"(Xs)] :- Ys="<-"([A|Xs]).
+Ys="->"(filter(A,Xs)) :- Ys=filter(A,"->"(Xs)).
+
+Ns="->"(gen($n,$max)) :- $n > $max | Ns="<-"([]).
+Ns="->"(gen($n,$max)) :- $n =<$max, $n1=$n+1 |
+    Ns=[$n|Ns1], N1=$n1, Ns1="<-"(gen(N1,$max)).
+
+Zs=sift($max,"<-"([])) :- int($max) | Zs="<-"([]).
+Zs=sift($max,"<-"([$p|Xs])) :- $p*$p<$max  |
+    Zs=[$p|Zs1], Ys=(filter($p,"->"(Xs))), Zs1=sift($max,Ys).
+Zs=sift($max,"<-"([$p|Xs])) :- $p*$p>=$max |
+    Zs=[$p|Zs1], Zs1=sift($max,"->"(Xs)).
+
+Ys=filter($p,"<-"([])) :- int($p) | Ys="<-"([]).
+Ys=filter($p,"<-"([$x|Xs])) :- $x mod $p=:=0 | Ys=filter($p,"->"(Xs)).
+Ys=filter($p,"<-"([$x|Xs])) :- $x mod $p=\=0 |
+    Ys="<-"([$x|Ys1]), Ys1=filter($p,Xs).
+
+primes($max,Ps) :- int($max) |
+    Ns="->"(gen(2,$max)), Ps=sift($max,Ns).
+
+primes(100,answer).
+
+
+
