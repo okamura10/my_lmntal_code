@@ -1,6 +1,6 @@
 /* prime number generator a la concurrent logic programming
-   Kazunori Ueda, 2004-03-12 */
-
+//   Kazunori Ueda, 2004-03-12 */
+//
 //gen($n,$max,Ns) :- $n > $max | Ns=[].
 //gen($n,$max,Ns) :- $n =<$max |
 //    Ns=[$n|Ns1], N1=$n+1, gen(N1,$max,Ns1).
@@ -22,25 +22,84 @@
 //primes(20,answer).
 
 
-//3917
+% //3917
 
-// 381
-gen($n,$max,Ns,R),sift(A,B,C,R) :- $n > $max | Ns=[],sift(A,B,C).
-gen($n,$max,Ns,R) :- $n =<$max |
-    Ns=[$n|Ns1], N1=$n+1, gen(N1,$max,Ns1,R).
+% // これ(genだけ先に終わらせる)で381
+% gen(A,B,Ns) :- Ns=gStart(L,R),gToken(A,B,L,R).
+% gToken($n,$max,Ns,R),A=gStart(B,R) :- $n > $max | Ns=[],A=B.
+% gToken($n,$max,Ns,R) :- $n =<$max |
+%     Ns=[$n|Ns1], N1=$n+1, gToken(N1,$max,Ns1,R).
+% //
+% //// shiftから生成したフィルタが消えるまでshift遷移しない、で1本道
+% sift($max,[],Zs) :- int($max) | Zs=[].
+% sift($max,[$p|Xs],Zs) :- $p*$p<$max  |
+%     Zs=[$p|Zs1], filter($p,Xs,Ys,R), sift($max,Ys,Zs1,R).
+% sift($max,[$p|Xs],Zs) :- $p*$p>=$max |
+%     Zs=[$p|Zs1], sift($max,Xs,Zs1).
 
-sift($max,[],Zs) :- int($max) | Zs=[].
-sift($max,[$p|Xs],Zs) :- $p*$p<$max  |
-    Zs=[$p|Zs1], filter($p,Xs,Ys,R), sift($max,Ys,Zs1,R).
-sift($max,[$p|Xs],Zs) :- $p*$p>=$max |
-    Zs=[$p|Zs1], sift($max,Xs,Zs1).
+% filter($p,[],Ys,R), sift(A,B,C,R):- int($p) | Ys=[],sift(A,B,C).
+% filter($p,[$x|Xs],Ys,R) :- $x mod $p=:=0 | filter($p,Xs,Ys,R).
+% filter($p,[$x|Xs],Ys,R) :- $x mod $p=\=0 |
+%     Ys=[$x|Ys1], filter($p,Xs,Ys1,R).
 
-filter($p,[],Ys,R), sift(A,B,C,R):- int($p) | Ys=[],sift(A,B,C).
-filter($p,[$x|Xs],Ys,R) :- $x mod $p=:=0 | filter($p,Xs,Ys,R).
-filter($p,[$x|Xs],Ys,R) :- $x mod $p=\=0 |
-    Ys=[$x|Ys1], filter($p,Xs,Ys1,R).
+% primes($max,Ps) :- int($max) |
+%     gen(2,$max,Ns), sift($max,Ns,Ps).
+
+% primes(100,answer).
+
+% // 1 わりと脳死でいける。
+% answer(tokenL(A)) :- answer=A.
+% L1=[X|L2],L2=tokenL(L3) :- L1=tokenL(L4),L4=[X|L3].
+% gen(A,B,tokenL(Ns)) :- token(gen(A,B,Ns)).
+% sift(A,tokenL(Ns),B) :- token(sift(A,Ns,B)).
+% filter(A,B,tokenL(Ns)) :- token(filter(A,B,Ns)).
+
+% token(gen($n,$max,Ns)) :- $n > $max | Ns=tokenL([]).
+% token(gen($n,$max,Ns)) :- $n =<$max |
+%     Ns=[$n|Ns1], N1=$n+1, token(gen(N1,$max,Ns1)).
+
+% token(sift($max,[],Zs)) :- int($max) | Zs=tokenL([]).
+% token(sift($max,[$p|Xs],Zs)) :- $p*$p<$max  |
+%     Zs=[$p|Zs1], token(filter($p,Xs,Ys)), sift($max,Ys,Zs1).
+% token(sift($max,[$p|Xs],Zs)) :- $p*$p>=$max |
+%     Zs=[$p|Zs1], token(sift($max,Xs,Zs1)).
+
+% token(filter($p,[],Ys)) :- int($p) | Ys=tokenL([]).
+% token(filter($p,[$x|Xs],Ys)) :- $x mod $p=:=0 | token(filter($p,Xs,Ys)).
+% token(filter($p,[$x|Xs],Ys)) :- $x mod $p=\=0 |
+%     Ys=[$x|Ys1], token(filter($p,Xs,Ys1)).
+
+% token(primes($max,Ps)) :- int($max) |
+%     token(gen(2,$max,Ns)), sift($max,Ns,Ps).
+
+% token(primes(5,answer)).
+
+
+% // 2 先に結果出す
+Ns="->"(gen($n,$max)) :- $n > $max | Ns="<-"([]).
+Ns="->"(gen($n,$max)) :- $n =<$max |
+    Ns=[$n|Ns1], N1=$n+1, Ns1="<-"(gen(N1,$max)).
+% +の評価場所が確定しない(元々ルール書いてないから)
+    Ns=[$n|Ns1], N1="<-"($n+1), Ns1=gen(N1,$max).
+Ns1=gen("<-"($p),M) :- int($p) |Ns1="<-"(gen($p,M)).
+
+
+sift($max,"<-"([]),Zs) :- int($max) | Zs="<-"([]).
+Zs=sift($max,"<-"([$p|Xs])) :- $p*$p<$max  |
+    Zs=[$p|Zs1], Ys=(filter($p,"->"(Xs))), Zs1=sift($max,Ys).
+Zs=sift($max,"<-"([$p|Xs])) :- $p*$p>=$max |
+    Zs=[$p|Zs1], Zs1=sift($max,"->"(Xs)).
+
+Ys=filter($p,"<-"([])) :- int($p) | Ys="<-"([]).
+Ys=filter($p,"<-"([$x|Xs])) :- $x mod $p=:=0 | Ys=filter($p,"->"(Xs)).
+Ys=filter($p,"<-"([$x|Xs])) :- $x mod $p=\=0 |
+    Ys="<-"([$x|Ys1]), Ys1=filter($p,Xs).
+
+Ys="->"(filter(A,Xs)) :- Ys=filter(A,"->"(Xs)).
+Ys=[A|"<-"(Xs)] :- Ys="<-"([A|Xs]).
+answer("<-"(L)) :- answer(L).
 
 primes($max,Ps) :- int($max) |
-    gen(2,$max,Ns,R), sift($max,Ns,Ps,R).
+    Ns="->"(gen(2,$max)), sift($max,Ns,Ps).
 
 primes(20,answer).

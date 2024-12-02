@@ -13,7 +13,7 @@ type(interface(R)) = {
 }.
 */
 
-  init(r).
+//  init(r).
 
 //  init(R) :-
 //    R=dn(apply(lambda(cp(Y0,Y1), apply(Y0,Y1)), lambda(X,X))).
@@ -77,12 +77,13 @@ type(interface(R)) = {
  
  R = fiv :- R = lambda(cp(X0, cp(X1, cp(X2, cp(X3, X4)))), lambda(Y, app(X0, app(X1, app(X2, app(X3, app(X4, Y))))))).
  R = for :- R = lambda(cp(X0, cp(X1, cp(X2, X3))), lambda(Y, app(X0, app(X1, app(X2, app(X3, Y)))))).
- R = thr :- R = lambda(cp(X0, cp(X1, X2)), lambda(Y, app(X0, app(X1, app(X2, Y))))).
+ R = thr :- R = lambda(cp(X0, cp(X1, X2)), lambda(Y, app1(X0, app2(X1, app3(X2, Y))))).
  R = two :- R = lambda(cp(X0, X1), lambda(Y, app(X0, app(X1, Y)))).
  R = id :- R = lambda(X, X).
  
- init(R) :- 
- 	R = down(app(two, two)).
+ 
+init(R) :- 
+R = down(app(two, two)).
  
  //basci rules
  R = down(lambda(A,B)) :- R = up(lambda(A,B)). 

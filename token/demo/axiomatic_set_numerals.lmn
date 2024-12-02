@@ -7,6 +7,8 @@
    give as many more inc's as you like!
 */
 
+// 元から1
+
 % The successor of a set S is S U {S}.  So, for
 % each inc message, S will evolve into its new
 % version by including the old S as a new member.

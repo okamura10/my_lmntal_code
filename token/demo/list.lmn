@@ -18,24 +18,36 @@
 
 % ins(a,[b,c,d],res).
 
-% // この問題本質的にはここだけ
-% ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
-% ins(X,L0,L ) :- L=[X|L0].
-% result(ins(a,ins(b,ins(c,[])))). 
 
-perm([a,b,c],L), result(L).
+perm([a,b,c,d,e],L), result(L).
 
-L=ptoken([],R), R=perm(A,B):- L=[],A=B.
-L=ptoken([X|L0],R) :- L1=ptoken(L0,R), ins(X,L1,L).
-perm([X|L0],L) :- perm(ptoken([X|L0],R),L,R).
+perm([X|L0],L) :- L=start(L1),ptoken([X|L0],L1). //初期化
+L=ptoken([]):- L=pLeft([]).
+L=ptoken([X|L0]) :- L1=ptoken(L0), ins(X,L1,L).
 
+% L2 ins L1 pLeft L3 -> pLeft iToken ins
+% i1@@ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
+% i2@@ins(X,L0,L ) :- L=[X|L0].
+ins(X,L1,L2),L1=pLeft(L3),:- L2=pLeft(L4,R),L4=iToken(L5,R),ins(X,L3,L5).
+L1=start(L2),L2=pLeft(L3) :- L1=L3.
+
+% ins -> .にするルールの適用が最後の要素から順になるように
+L1=iToken(ins(X,[Y|L3]),R) :- L1=[Y|L4],L4=iToken(ins(X,L3),R). // 右にずらす
+L1=iToken(ins(X,L3),R),pLeft(A,R,B) :-L1=[X|L3],pLeft(A,B).     //その場で挿入
+
+//// トークン無しを再現しようとしたやつ
+//// 無限ループ、終了判定がうまくいってな
 //L=ptoken([],R), R=perm(A,B):- L=[],A=B.
 //L=ptoken([X|L0],R) :- L1=ptoken(L0,R), ins(X,L1,L).
 //perm([X|L0],L) :- perm(ptoken([X|L0],R),L,R).
 //
+//L=ptoken([],R), R=perm(A,B):- L=[],A=B.
+//L=ptoken([X|L0],R) :- L1=ptoken(L0,R), ins(X,L1,L).
+//perm([X|L0],L) :- perm(ptoken([X|L0],R),L,R).
+////
 //result(ins(A,N)):- result(token(ins(A,N),R,0),R).
 //result('.'(A,N)):- result(token('.'(A,N),R,0),R).
-//
+////
 //L=token(ins(X,[Y|L0]),R,C) :-int(C),NC=C+1| L=[Y|L2],L2=token(ins(X,L0),R,NC).
 //L=token(ins(X,L0),R,C) :-int(C),NC=C+1|  L=[X|L1],L1=token(L0,R,NC).
 //L=token(ins(X,L0),R,C) :-int(C),NC=C+1|  L=ins(X,L1),L1=token(L0,R,NC).

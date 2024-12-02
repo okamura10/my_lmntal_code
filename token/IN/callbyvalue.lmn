@@ -1,0 +1,43 @@
+// 主要ポートを最初の引数にしたのは失敗だったと思う
+// 最後の方が良い
+
+init.
+//init :-
+//    result = down(P),apply(P,AA1,N1),apply(AA1,PLUS,N2),
+//    lambda(PLUS,M1,PL1),lambda(PL1,N,PL2),lambda(PL2,S1,PL3),lambda(PL3,Z1,PA1),
+//    apply(PA1,PA2,PA3),apply(PA2,M1,S2),apply(PA3,PA4,Z1),apply(PA4,N,S3),c(S1,S2,S3),
+//    lambda(N2,F1,L2),lambda(L2,X1,A1),apply(A1,F2,A2),apply(A2,F3,X1),c(F1,F2,F3),
+//    lambda(N1,F4,L4),lambda(L4,X4,A4),apply(A4,F4,X4).
+
+init :-
+    result = down(P),apply(P,two,two).
+
+//rule@@
+//A=up(result):-result=down(A).
+    
+two@@N2=two:-lambda(N2,F1,L2),lambda(L2,X1,A1),apply(A1,F2,A2),apply(A2,F3,X1),c(F1,F2,F3).
+one@@N1=one:-lambda(N1,F4,L4),lambda(L4,X4,A4),apply(A4,F4,X4).
+// Call-by-NameandCall-by-ValueasToken-PassingInteractionNet
+// 4
+down(P,L),lambda(P,A,B) :- up(L,L1),lambda(L1,A,B).
+down(P,L),apply(P,A,B) :- at(P2,B,L),down(A,P2).
+up(P,A),at(P,B,L):- at2(D,L,A),down(B,D).
+at2(P,L,A),up(P,B) :- at(A,B,L).
+at(P,B,L),lambda(P,AL,BL) :- down(BL,L),AL=B.
+
+// 3.6
+epsilon(P),lambda(P,A,B) :- epsilon(A), epsilon(B).
+epsilon(P),apply(P,A,B) :- epsilon(A), epsilon(B).
+epsilon(P),at(P,A,B) :- epsilon(A), epsilon(B).
+epsilon(P),down(P,A) :- epsilon(A).
+epsilon(P),up(P,A) :- epsilon(A).
+
+cl@@ c(P,A1,B1),lambda(P,A2,B2) :- lambda(A1,L1A,L1B),lambda(B1,L2A,L2B),delta(A2,L2A,L1A),delta(B2,L2B,L1B).
+ca@@ c(P,A1,B1),apply(P,A2,B2)  :- apply(A1,L1A,L1B),apply(B1,L2A,L2B),c(A2,L2A,L1A),delta(B2,L2B,L1B). 
+cat@@c(P,A1,B1),at(P,A2,B2)     :- at(A1,L1A,L1B),at(B1,L2A,L2B),c(A2,L2A,L1A),c(B2,L2B,L1B).
+ad@@ c(P,A1,B1),delta(P,A2,B2)  :- delta(A1,L1A,L1B),delta(B1,L2A,L2B),c(A2,L2A,L1A),c(B2,L2B,L1B).
+
+dl@@ delta(P,A1,B1),lambda(P,A2,B2) :- lambda(A1,L1A,L1B),lambda(B1,L2A,L2B),delta(A2,L2A,L1A),delta(B2,L2B,L1B).
+da@@ delta(P,A1,B1),apply(P,A2,B2)  :- apply(A1,L1A,L1B),apply(B1,L2A,L2B),delta(A2,L2A,L1A),delta(B2,L2B,L1B). 
+dat@@delta(P,A1,B1),at(P,A2,B2)     :- at(A1,L1A,L1B),at(B1,L2A,L2B),delta(A2,L2A,L1A),delta(B2,L2B,L1B).
+dd@@ delta(P,A1,B1),delta(P,A2,B2)  :- A1=A2,B1=B2.

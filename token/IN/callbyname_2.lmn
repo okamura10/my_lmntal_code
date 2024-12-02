@@ -1,0 +1,53 @@
+// 主要ポートを最後にして反時計回り
+
+% P = down(result),P=a(lambda(F0,lambda(X0,a(F10,a(F20,X0)))),lambda(F,lambda(X,a(F1,a(F2,X))))),F0=c(F20,F10),F=c(F2,F1).
+
+% N2=two:-N2=lambda(F,lambda(X,a(F1,a(F2,X)))),F=c(F2,F1).
+//P = down(result),
+//P = a(lambda(A,A),
+//     a(lambda(B,B),
+//       lambda(Z,a(lambda(C,C),Z)))).
+P = down(result),
+P = a(lambda(A,A),lambda(B,B)).
+
+
+//lambda(A,B),A=B.
+//res=l(L,L).
+// Call-by-NameandCall-by-ValueasToken-PassingInteractionNet
+// 3.5
+L2=down(L1),L2=lambda(A,B) :- L1=up(L2),L2=lambda(A,B).
+L2=down(L1),L2= a(A,B)     :- L3=at(B,L1),A=down(L3).
+L1=up(A),L1=at(B,L)        :- A=at(B,L).            // ポートの制約でこうなってるけど、
+L2=at(B2,L1),L2=lambda(A1,B1) :- B1=down(L1),A1=B2. // LMNtalはこの二行くっつけて書いちゃってもいいはず
+
+// 3.6
+% epsilon(P),lambda(P,A,B) :- epsilon(A), epsilon(B).
+% epsilon(P),a(P,A,B) :- epsilon(A), epsilon(B).
+% epsilon(P),at(P,A,B) :- epsilon(A), epsilon(B).
+% epsilon(P),down(P,A) :- epsilon(A).
+% epsilon(P),up(P,A) :- epsilon(A).
+
+cl@@ P=c(A1,B1),P=lambda(A2,B2) 
+    :- B1=lambda(L1,L2),A1=lambda(L3,L4),
+       A2=delta(L3,L1), B2=delta(L4,L2).
+ca@@ P=c(A1,B1),P=a(A2,B2) 
+    :- B1=a(L1,L2),A1=a(L3,L4),
+       A2=c(L3,L1), B2=c(L4,L2).
+cat@@ P=c(A1,B1),P=at(A2,B2) 
+    :- B1=at(L1,L2),A1=at(L3,L4),
+       A2=c(L3,L1), B2=c(L4,L2).
+ad@@ P=c(A1,B1),P=delta(A2,B2) 
+    :- B1=delta(L1,L2),A1=delta(L3,L4),
+       A2=c(L3,L1), B2=c(L4,L2).
+
+dl@@ P=delta(A1,B1),P=lambda(A2,B2) 
+    :- B1=lambda(L1,L2),A1=lambda(L3,L4),
+       A2=delta(L3,L1), B2=delta(L4,L2).
+da@@ P=delta(A1,B1),P=a(A2,B2) 
+    :- B1=a(L1,L2),A1=a(L3,L4),
+       A2=delta(L3,L1), B2=delta(L4,L2).
+dat@@P=delta(A1,B1),P=at(A2,B2) 
+    :- B1=at(L1,L2),A1=at(L3,L4),
+       A2=delta(L3,L1), B2=delta(L4,L2).
+dd@@ P=delta(A1,B1),P=delta(A2,B2) 
+    :- A1=A2,B1=B2.
