@@ -1,0 +1,65 @@
+// とてもシンプルな二分探索木のコード
+
+head=sea(10,ins(7,ins(12,ins(5,ins(1,X))))), X=node(10,node(2,z,z),z).
+ 
+
+// % // 元の命令
+// B = ins(D,z) :- B = node(D,z,z). %末端
+// B = ins(D,node(F, L, R)) :- D < F | B = node(F, ins(D,L), R).    %右部分木
+// B = ins(D,node(F, L, R)) :- D > F | B = node(F, L , ins(D,R)).   %左部分木
+// B = ins(D,node(F, L, R)) :- D = F | B = node(F, L, R),  fail(ins,D). %使用済み
+// 
+// B = sea(D,z) :- B=z,fail(sea,D).
+// B = sea(D,node(F, L, R)) :- D < F | B = node(F, sea(D,L), R).    %右部分木
+// B = sea(D,node(F, L, R)) :- D > F | B = node(F, L , sea(D,R)).   %左部分木
+// B = sea(D,node(F, L, R)) :- D = F | B = node(F, L , R), succ(serch,D). 
+
+
+
+// % // トークン2
+ B = "->"(ins(D,z)) :- B = "<-"(node(D,z,z)). 
+ B = "->"(ins(D,node(F,L,R))) :- D < F | B = node(F,"<-"(ins(D,L)),R).   
+ B = "->"(ins(D,node(F,L,R))) :- D > F | B = node(F,L,"<-"(ins(D,R))).   
+ B = "->"(ins(D,node(F,L,R))) :- D = F | B = "<-"(node(F,L,R)), fail(ins,D). 
+ 
+ B = "->"(sea(D,z)) :- B="<-"(z),fail(sea,D).
+ B = "->"(sea(D,node(F,L,R))) :- D < F | B = node(F,"<-"(sea(D,L)),R).   
+ B = "->"(sea(D,node(F,L,R))) :- D > F | B = node(F,L,"<-"(sea(D,R))).   
+ B = "->"(sea(D,node(F,L,R))) :- D = F | B = "<-"(node(F,L,R)),succ(serch,D). 
+
+init.
+init@@ init,head=L :- head=goal("->"(L),E1,E2),end(E1),end(E2).
+pas1@@ B="->"(ins(D,ins(D2,L))) :- B=ins(D,"->"(ins(D2,L))). 
+pas2@@ B="->"(sea(D,sea(D2,L))) :- B=sea(D,"->"(sea(D2,L))).
+pas3@@ B="->"(ins(D,sea(D2,L))) :- B=ins(D,"->"(sea(D2,L))).
+pas4@@ B="->"(sea(D,ins(D2,L))) :- B=sea(D,"->"(ins(D2,L))).
+
+pas5@@ B=node(F,"<-"(L),R) :- B=node(F,L,"->"(R)). 
+pas6@@ B=node(F,L,"<-"(R)) :- B="<-"(node(F,L,R)).
+
+pfu7@@ B=ins(D,"<-"(L)) :- B="<-"(ins(D,L)). 
+pfu8@@ B=sea(D,"<-"(L)) :- B="<-"(sea(D,L)).
+
+pasS@@ head="<-"(L) :- head="->"(L). 
+//pasG@@ B="->"(goal(L),E1,E2)) :- B=goal("->"(L),E1,E2).
+pasG@@ B="->"(goal(ins(D,L),E1,E2)) :- B=goal("->"(ins(D,L)),E1,E2).
+pasG@@ B="->"(goal(sea(D,L),E1,E2)) :- B=goal("->"(sea(D,L)),E1,E2).
+
+pas9@@ B="->"(node(F,L,R)) :- B=node(F,"->"(L),R).
+pas10@@ B="->"(z) :- B="<-"(z).
+
+pasG1@@ B=goal("<-"(L),E1,E2) :- unary(E1),unary(E2)|B="->"(goal(L,E1,E2)).
+pasG2@@ B=goal("<-"(L),E1,E2),G1=goal(G2,G3,E1) :- B="<-"(goal(L,E1,E2)),G1=goal(G2,G3,E1).
+pasG2@@ B=goal("<-"(L),E1,E2),G1=goal(G2,E2,G3) :- B="<-"(goal(L,E1,E2)),G1=goal(G2,E2,G3).
+
+movG@@ B="->"(A),A=goal(node(F,L,R),E1,E2)
+		:- B="->"(A),A=node(F,goal(L,E1,EN),goal(R,EN,E2)). 
+		
+endG@@ B="->"(goal(z,E1,E2)) :- unary(E1),unary(E2)|B=z,E1=E2.
+endG1@@ B="->"(goal(z,$e1,E2)) :- $e1 \= 'end' | B="<-"(z),$e1=E2.
+endG2@@ B="->"(goal(z,E1,$e2)) :- $e2 \= 'end' | B="<-"(z),E1=$e2.
+% endG@@ B="->"(goal(z,E1,E2)),G1=goal(G2,G3,E1) :- B="<-"(z),G1=goal(G2,G3,E2).
+% endG@@ B="->"(goal(z,E1,E2)),G1=goal(G2,E2,G3) :- B="<-"(z),G1=goal(G2,E1,G3).
+
+
+fin@@ end(A,A),L="<-"(L2) :- L=L2.

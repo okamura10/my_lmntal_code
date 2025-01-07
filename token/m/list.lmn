@@ -1,0 +1,63 @@
+// とてもシンプルな二分探索木のコード
+
+head="->"(sea(7,ins(7,ins(12,ins(5,ins(1,X)))))), X=node(10,node(2,z,z),z).
+ 
+
+// % // 元の命令
+// B = ins(D,z) :- B = node(D,z,z). %末端
+// B = ins(D,node(F, L, R)) :- D < F | B = node(F, ins(D,L), R).    %右部分木
+// B = ins(D,node(F, L, R)) :- D > F | B = node(F, L , ins(D,R)).   %左部分木
+// B = ins(D,node(F, L, R)) :- D = F | B = node(F, L, R),  fail(ins,D). %使用済み
+// 
+// B = sea(D,z) :- B=z,fail(sea,D).
+// B = sea(D,node(F, L, R)) :- D < F | B = node(F, sea(D,L), R).    %右部分木
+// B = sea(D,node(F, L, R)) :- D > F | B = node(F, L , sea(D,R)).   %左部分木
+// B = sea(D,node(F, L, R)) :- D = F | B = node(F, L , R), succ(serch,D). 
+
+
+//
+//// % // トークン2
+// B = "->"(ins(D,z)) :- B = "<-"(node(D,z,z)). 
+// B = "->"(ins(D,node(F,L,R))) :- D < F | B = node(F,"<-"(ins(D,L)),R).   
+// B = "->"(ins(D,node(F,L,R))) :- D > F | B = node(F,L,"<-"(ins(D,R))).   
+// B = "->"(ins(D,node(F,L,R))) :- D = F | B = "<-"(node(F,L,R)), fail(ins,D). 
+// 
+// B = "->"(sea(D,z)) :- B="<-"(z),fail(sea,D).
+// B = "->"(sea(D,node(F,L,R))) :- D < F | B = node(F,"->"(sea(D,L)),R).   
+// B = "->"(sea(D,node(F,L,R))) :- D > F | B = node(F,L,"->"(sea(D,R))).   
+// B = "->"(sea(D,node(F,L,R))) :- D = F | B = "<-"(node(F,L,R)),succ(serch,D). 
+//
+//
+//fu1@@ B=ins(D,"<-"(L)) :- B="->"(ins(D,L)).
+//fu2@@ B=sea(D,"<-"(L)) :- B="->"(sea(D,L)).
+//pa1@@ B=node(F,"<-"(L),R) :- B="<-"(node(F,L,R)). 
+//pa2@@ B=node(F,L,"<-"(R)) :- B="<-"(node(F,L,R)).
+//pa3@@ B="->"(ins(D,ins(D2,L))) :- B=ins(D,"->"(ins(D2,L))). 
+//pa4@@ B="->"(sea(D,sea(D2,L))) :- B=sea(D,"->"(sea(D2,L))).
+//pa5@@ B="->"(ins(D,sea(D2,L))) :- B=ins(D,"->"(sea(D2,L))).
+//pa6@@ B="->"(sea(D,ins(D2,L))) :- B=sea(D,"->"(ins(D2,L))).
+//fin@@ head="<-"(L) :- head=L.  
+////stp@@ head="<-"(L) :- head=stop("->"(L)).
+
+
+
+% // % // トークン
+ B = ins(D,"->"(z)) :- B = "<-"(node(D,z,z)). %末端
+ B = ins(D,"->"(node(F,L,R))) :- D < F | B = node(F,ins(D,"->"(L)),R).    %右部分木
+ B = ins(D,"->"(node(F,L,R))) :- D > F | B = node(F,L ,ins(D,"->"(R))).   %左部分木
+ B = ins(D,"->"(node(F,L,R))) :- D = F | B = "<-"(node(F,L,R)), fail(ins,D). %使用済み
+ 
+ B = sea(D,"->"(z)) :- B="<-"(z),fail(sea,D).
+ B = sea(D,"->"(node(F,L,R))) :- D < F | B = node(F,sea(D,"->"(L)),R).    %右部分木
+ B = sea(D,"->"(node(F,L,R))) :- D > F | B = node(F,L ,sea(D,"->"(R))).   %左部分木
+ B = sea(D,"->"(node(F,L,R))) :- D = F | B = "<-"(node(F,L,R)),succ(serch,D). 
+
+
+B=ins(D,"<-"(L)) :- B=ins(D,"->"(L)). //次の関数
+B=sea(D,"<-"(L)) :- B=sea(D,"->"(L)).
+B="->"(ins(D,L)) :- B=ins(D,"->"(L)). //初回スキップ
+B="->"(sea(D,L)) :- B=sea(D,"->"(L)).
+B=node(F,"<-"(L),R) :- B="<-"(node(F,L,R)). //戻す
+B=node(F,L,"<-"(R)) :- B="<-"(node(F,L,R)).
+head="<-"(L) :- head=L.                 // 終わる
+

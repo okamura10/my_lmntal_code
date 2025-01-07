@@ -1,0 +1,28 @@
+//% t1@@ t2l(n(N,L,R),T,P) :- t2l(L,"."(N,t2l(R,T)),P).
+//% t2@@ t2l(l,T,P) :- T=P.
+//
+//// 変形
+//% t1@@ P=t2l(n(N,L,R),T) :- P=t2l(L,"."(N,t2l(R,T))).
+//% t2@@ P=t2l(l,T) :- P=T.
+//
+//t2l(L,[],head),
+//L=n(3,n(1,n(4,l,l),n(5,l,l)),n(2,n(1,l,l),l)).
+//
+////% P="->"(t2l(n(N,L,R),T)) :- P="->"(t2l(L,"."(N,t2l(R,T)))).
+////P="->"(t2l(n(N,L,R),T)) :- P=t2l(L,"."(N,"->"(t2l(R,T)))).
+//P="->"(t2l(l,T)) :- P="->"(T).
+//
+//init.
+//init@@ init,head=L :- head="->"(L).
+//
+//pas1@@ B="->"([X|L]) :- B=[X|"->"(L)].
+//pas2@@ B="->"([]) :- B="<-"([]).
+//pas3@@ B=t2l(N,"<-"(L)) :- B="->"(t2l(N,L)).
+//pas4@@ B=[X|"<-"(L)] :- B="<-"([X|L]).
+
+t(a,b,c), token(10).
+ 
+ t(H,T,R), token(N) :- 
+ 	N>0, N1=N-1|
+ 	n(H1, t(H,H1), t(T1,T), T1, R), token(N1).
+ t(H,T,R), token(0) :- l(H,T,R), token(0).

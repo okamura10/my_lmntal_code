@@ -1,0 +1,9 @@
+//worker([print(10),print(15),yield,print(20),print(40)]).
+//printer([]).
+//tasks([]).
+//worker([print(N)|T]), printer(P):- worker(T), printer([N|P]).
+//worker(Y), Y="."(yield,$q), tasks(P):- ground($q) | worker=call_cc(A,A,app("."(C,$q),stop),C), tasks([$q|P]).
+//restart@@worker(stop), tasks([H|T]):- worker(H), tasks([T]).
+//
+//// 
+//worker=call_cc(A,B,C,D) :- worker(stop),A=B,C=D.

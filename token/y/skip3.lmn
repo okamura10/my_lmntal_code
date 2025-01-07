@@ -1,0 +1,31 @@
+// nonterminals:
+ //    sl(L,E,N,0): skiplist with at most N skips,
+ //    where N = 0, s(0), s(s(0)), ...
+ //    sl(L,E,M,N): skiplist with at most M more skips
+ //                 and N already skipped stops
+ //    0,s: nonterminals for the counter
+ //    sle: skiplist starting from e
+ //    sln: skiplist starting from (and endind with) n
+ // terminals:
+ //    c(L0,L): an ordinary stop
+ //    e(L0,E0,L,E): an "express" stop
+ //    n(L,E): nil, the final stop
+ // Token t (if any) controls the total number of stops
+ 
+// s@@ sl(E,L) :- sl(s(s(s(0))),0,E,L).
+// 
+// c1@@ t,sl(s(X),Y,E,L) :- c(L1,L), sl(X,s(Y),E,L1). // 急行通過駅作成完了
+// e1@@ t,sl(X,Y,E,L) :- sle(X,Y,E,L).         // 急行停車駅作成開始
+// n1@@ sl(X,Y,E,L) :- sln(X,Y,E,L).           // 終端駅作成開始
+// 
+// e2@@ sle(s(X),Y,E,L) :- sle(X,s(Y),E,L).    // 通過可能駅数カウンタのクリア
+// e3@@ sle(0,Y,E,L) :- e(L2,E2,E,L), sl(Y,0,E2,L2).  // 急行停車駅作成完了
+// 
+// n2@@ sln(s(X),Y,E,L) :- sln(X,s(Y),E,L).    // 通過可能駅数カウンタのクリア
+// n3@@ sln(0,s(s(s(0))),E,L) :- n(E,L).       // 終端駅作成完了
+// 
+// sl(exp,local), t,t,t,t,t.
+ 
+
+local(e(e(c(e(c(n(L0)),L0,L1)),L1,L2),L2,exp)).
+c2e @@ c(L1,L), e(L2,E2,E,L1) :- e(L1,E1,E,L), e(L2,E2,E1,L1).

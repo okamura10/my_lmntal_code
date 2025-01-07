@@ -1,0 +1,22 @@
+
+
+head="->"(B),
+B=plus(C1,C2),C1=plus(1,C3),C3=plus(2,3),
+C2=plus(C4,C5),C4=plus(4,5),C5=plus(6,7).
+
+// A=plus(PA,PB) :- int(PA),int(PB),PC=PA+PB|A=PC.
+
+// tokenが歩き回って計算を進める
+// 単に実行順序が一意に定められる
+A="<-"(plus(PA,PB)) :- int(PA),int(PB),PC=PA+PB|A="<-"(PC).
+
+A="->"(N):- int(N) | A="<-"(N).            //終端反転
+A="->"(plus(PA,PB)):- A=plus("->"(PA),PB). //上から左
+A=plus("<-"(PA),PB) :- int(PA)|A = plus(PA,"->"(PB)). //左から右(反転)
+A=plus(PA,"<-"(PB)) :- int(PB)|A="<-"(plus(PA,PB)).   //右から上
+
+A="->"(N):- int(N) | A="<-"(N).            //終端反転
+A="->"(plus(PA,PB)):- A=plus("->"(PA),PB). //上から左
+A=plus("<-"(PA),PB) :- int(PA)|A = plus(PA,"->"(PB)). //左から右(反転)
+A=plus(PA,"<-"(PB)) :- int(PB)|A="<-"(plus(PA,PB)).   //右から上
+

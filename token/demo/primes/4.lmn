@@ -1,0 +1,34 @@
+% // 途中で戻って~っていうのをやりたい
+
+answer("<-"(L,List)) :- answer(L),fin=List.
+Ys=[A|"<-"(Xs,L)] :- Ys="<-"([A|Xs],L).
+Ys="->"(filter(A,Xs),L) :- Ys=filter(A,"->"(Xs,L)).
+Ys="->"([A|Xs],L) :- Ys=[A|"->"(Xs,L)].
+Ys="->"([],L):-Ys="<-"([],L).
+
+Ns="->"(gen($n,$max),L) :- $n > $max | Ns="<-"([],L).
+Ns="->"(gen($n,$max),[]) :- $n =<$max, $n1=$n+1 |
+    Ns=[$n|Ns1], N1=$n1, Ns1="->"(gen(N1,$max),[]).
+Ns="->"(gen($n,$max),[0|L]) :- $n =<$max, $n1=$n+1 |
+    Ns=[$n|Ns1], N1=$n1, Ns1="->"(gen(N1,$max),L).
+Ns="->"(gen($n,$max),[1|L]) :- $n =<$max, $n1=$n+1 |
+    Ns=[$n|Ns1], N1=$n1, Ns1="<-"(gen(N1,$max),L).
+
+Zs=sift($max,"<-"([],L)) :- int($max) | Zs="<-"([],L).
+Zs=sift($max,"<-"([$p|Xs],L)) :- $p*$p<$max  |
+    Zs=[$p|Zs1], Ys=(filter($p,"->"(Xs,L))), Zs1=sift($max,Ys).
+Zs=sift($max,"<-"([$p|Xs],L)) :- $p*$p>=$max |
+    Zs=[$p|Zs1], Zs1=sift($max,"->"(Xs,L)).
+
+Ys=filter($p,"<-"([],L)) :- int($p) | Ys="<-"([],L).
+Ys=filter($p,"<-"([$x|Xs],L)) :- $x mod $p=:=0 | Ys=filter($p,"->"(Xs,L)).
+Ys=filter($p,"<-"([$x|Xs],L)) :- $x mod $p=\=0 |
+    Ys="<-"([$x|Ys1],L), Ys1=filter($p,Xs).
+
+primes($max,Ps) :- int($max) |
+    Ns="->"(gen(2,$max),L), Ps=sift($max,Ns),L=[0,1,0,0,0,0,1,0,1,0].
+
+primes(10,answer).
+
+
+

@@ -1,0 +1,86 @@
+Compiled Ruleset @602 
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 7]
+        commit         ["_init", 0]
+        loadruleset    [0, @601]
+        newatom      [1, 0, 't'_3]
+        newatom      [2, 0, 'a'_1]
+        newatom      [3, 0, 'b'_1]
+        newatom      [4, 0, 'c'_1]
+        newatom      [5, 0, 'token'_1]
+        newatom      [6, 0, 10_1]
+        newlink        [1, 0, 2, 0, 0]
+        newlink        [1, 1, 3, 0, 0]
+        newlink        [1, 2, 4, 0, 0]
+        newlink        [5, 0, 6, 0, 0]
+        proceed        []
+
+
+Compiled Ruleset @601  
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 14]
+        findatom     [1, 0, 't'_3]
+        findatom     [2, 0, 'token'_1]
+        derefatom    [5, 2, 0]
+        isint          [5]
+        allocatom    [3, 0_1]
+        igt            [5, 3]
+        allocatom    [4, 1_1]
+        isub         [6, 5, 4]
+        getfunc      [7, 6]
+        allocatomindirect[8, 7]
+        commit         ["_tHTR", 0]
+        removeatom     [1, 0]
+        removeatom     [2, 0]
+        removeatom     [5, 0]
+        copyatom     [9, 0, 8]
+        newatom      [10, 0, 'n'_5]
+        newatom      [11, 0, 't'_3]
+        newatom      [12, 0, 't'_3]
+        newatom      [13, 0, 'token'_1]
+        newlink        [10, 0, 11, 1, 0]
+        newlink        [10, 1, 11, 2, 0]
+        newlink        [10, 2, 12, 2, 0]
+        newlink        [10, 3, 12, 0, 0]
+        relink         [10, 4, 1, 2, 0]
+        relink         [11, 0, 1, 0, 0]
+        relink         [12, 1, 1, 1, 0]
+        newlink        [13, 0, 9, 0, 0]
+        freeatom       [1]
+        freeatom       [2]
+        freeatom       [8]
+        freeatom       [5]
+        freeatom       [3]
+        freeatom       [6]
+        freeatom       [4]
+        proceed        []
+
+Compiled Rule 
+    --atommatch:
+    --memmatch:
+        spec           [1, 7]
+        findatom     [1, 0, 't'_3]
+        findatom     [2, 0, 'token'_1]
+        deref        [3, 2, 0, 0]
+        func           [3, 0_1]
+        commit         ["_tHTR", 0]
+        removeatom     [1, 0]
+        removeatom     [2, 0]
+        removeatom     [3, 0]
+        newatom      [4, 0, 'l'_3]
+        newatom      [5, 0, 'token'_1]
+        newatom      [6, 0, 0_1]
+        relink         [4, 0, 1, 0, 0]
+        relink         [4, 1, 1, 1, 0]
+        relink         [4, 2, 1, 2, 0]
+        newlink        [5, 0, 6, 0, 0]
+        freeatom       [1]
+        freeatom       [2]
+        freeatom       [3]
+        proceed        []
+
+

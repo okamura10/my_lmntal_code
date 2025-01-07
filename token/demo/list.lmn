@@ -4,36 +4,88 @@
 % choose(X, [Y|L0],L1) :- L1=[Y|L], choose(X,L0,L).
 % choose(X0,[X|L], L0) :- X0=X, L0=L.
 
+% choose(X,[a,b,c],Y), result(X,Y).
+% result(ins(a,ins(b,ins(c,[])))). 
+//% ins(a,[b,c,d],res).
+//
 //i1@@ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
 //i2@@ins(X,L0,L ) :- L=[X|L0].
 //
 //p1@@perm([],L) :- L=[].
 //p2@@perm([X|L0],L) :- perm(L0,L1), ins(X,L1,L).
 
-% choose(X,[a,b,c],Y), result(X,Y).
+//perm([a,b,c,c,c],L), result(L).
 
-% perm([a,b,c],L), result(L).
+//
 
-% result(ins(a,ins(b,ins(c,[])))). 
+% "->"(choose(X, [Y|L0],L1)) :- L1=[Y|L], "->"(choose(X,L0,L)).
+% "->"(choose(X0,[X|L], L0)) :- X0=X, L0=L.
 
-% ins(a,[b,c,d],res).
+% "->"(choose(X,[a,b,c],Y)), result(X,Y).
+//
+////書き換え規則には含まれないアトムとトークンの組み合わせに対する処理
+//p1@@L=[X|"<-"(L0)] :- L="<-"([X|L0]).
+//p2@@result="<-"(L):- result(L).
+//
+//L1=ins(X,"<-"([Y|L0])) :- L1=[Y|L], L=ins(X,"<-"(L0)).
+//L=ins(X,"<-"(L0)) :- L="<-"([X|L0]).
+//
+//L="->"(perm([])) :- L="<-"([]).
+//L="->"(perm([X|L0])) :- L1="->"(perm(L0)), L=ins(X,L1).
 
 
-perm([a,b,c,d,e],L), result(L).
+//書き換え規則には含まれないアトムとトークンの組み合わせに対する処理
+fin@@ result="<-"(L):- result(L).
+fu1@@ L=(ins(X,"<-"(L0))) :- L="->"(ins(X,L0)).
+pa1@@ L=[X|"<-"(L0)] :- L="<-"([X|L0]).
 
-perm([X|L0],L) :- L=start(L1),ptoken([X|L0],L1). //初期化
-L=ptoken([]):- L=pLeft([]).
-L=ptoken([X|L0]) :- L1=ptoken(L0), ins(X,L1,L).
+L1="->"(ins(X,[Y|L0])) :- L1=[Y|L], L="->"(ins(X,L0)).
+L="->"(ins(X,L0)) :- L="<-"([X|L0]).
 
-% L2 ins L1 pLeft L3 -> pLeft iToken ins
-% i1@@ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
-% i2@@ins(X,L0,L ) :- L=[X|L0].
-ins(X,L1,L2),L1=pLeft(L3),:- L2=pLeft(L4,R),L4=iToken(L5,R),ins(X,L3,L5).
-L1=start(L2),L2=pLeft(L3) :- L1=L3.
+L="->"(perm([])) :- L="<-"([]).
+L="->"(perm([X|L0])) :- L1="->"(perm(L0)), L=ins(X,L1).
 
-% ins -> .にするルールの適用が最後の要素から順になるように
-L1=iToken(ins(X,[Y|L3]),R) :- L1=[Y|L4],L4=iToken(ins(X,L3),R). // 右にずらす
-L1=iToken(ins(X,L3),R),pLeft(A,R,B) :-L1=[X|L3],pLeft(A,B).     //その場で挿入
+//% //書き換え規則には含まれないアトムとトークンの組み合わせに対する処理
+//p1@@L=[X|"<-"(L0)] :- L="<-"([X|L0]).
+//p2@@L="->"([X|L0]) :- L=([X|"->"(L0)]).
+//p3@@result="<-"(L):- result(L).
+//
+//% L1=ins(X,[Y|L0]) :- L1=[Y|L], L=ins(X,L0).  //これ無理
+//% L1=[X|ins(Y,L0)] :- L1=ins(Y,L), L=[X|L0].  //こう改変したらいける
+//L1=[X|ins(Y,"<-"(L0))] :- L1=ins(Y,"<-"(L)), L=[X|L0].
+//L=ins(X,"<-"(L0)) :- L=([X|"->"(L0)]).
+//
+//L="->"(perm([])) :- L="<-"([]).
+//L="->"(perm([X|L0])) :- L1="<-"(perm(L0)), L=ins(X,L1).
+
+% L1=ins(X,[Y|L0]) :- L1=[Y|L], L=ins(X,L0).  //これ無理
+% L1=[X|ins(Y,L0)] :- L1=ins(Y,L), L=[X|L0].  //こう改変したらいける
+//L1=[X|ins(Y,"<-"(L0))] :- L1=ins(Y,"<-"(L)), L=[X|L0].
+//L=ins(X,"<-"(L0)) :- L=([X|"->"(L0)]).
+//
+//L="->"(perm([])) :- L="<-"([]).
+//L="->"(perm([X|L0])) :- L1="<-"(perm(L0)), L=ins(X,L1).
+
+L="->"(perm([a,b,c,d])), result(L).
+
+
+
+% // 旧ver
+% perm([a,b,c,d,e],L), result(L).
+
+% perm([X|L0],L) :- L=start(L1),ptoken([X|L0],L1). //初期化
+% L=ptoken([]):- L=pLeft([]).
+% L=ptoken([X|L0]) :- L1=ptoken(L0), ins(X,L1,L).
+
+% % L2 ins L1 pLeft L3 -> pLeft iToken ins
+% % i1@@ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
+% % i2@@ins(X,L0,L ) :- L=[X|L0].
+% ins(X,L1,L2),L1=pLeft(L3),:- L2=pLeft(L4,R),L4=iToken(L5,R),ins(X,L3,L5).
+% L1=start(L2),L2=pLeft(L3) :- L1=L3.
+
+% % ins -> .にするルールの適用が最後の要素から順になるように
+% L1=iToken(ins(X,[Y|L3]),R) :- L1=[Y|L4],L4=iToken(ins(X,L3),R). // 右にずらす
+% L1=iToken(ins(X,L3),R),pLeft(A,R,B) :-L1=[X|L3],pLeft(A,B).     //その場で挿入
 
 //// トークン無しを再現しようとしたやつ
 //// 無限ループ、終了判定がうまくいってな
