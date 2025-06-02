@@ -8,11 +8,11 @@
 % result(ins(a,ins(b,ins(c,[])))). 
 //% ins(a,[b,c,d],res).
 //
-//i1@@ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
-//i2@@ins(X,L0,L ) :- L=[X|L0].
-//
-//p1@@perm([],L) :- L=[].
-//p2@@perm([X|L0],L) :- perm(L0,L1), ins(X,L1,L).
+i1@@ins(X,[Y|L0],L1) :- L1=[Y|L], ins(X,L0,L).
+i2@@ins(X,L0,L ) :- L=[X|L0].
+
+p1@@perm([],L) :- L=[].
+p2@@perm([X|L0],L) :- perm(L0,L1), ins(X,L1,L).
 
 //perm([a,b,c,c,c],L), result(L).
 
@@ -35,15 +35,15 @@
 
 
 //書き換え規則には含まれないアトムとトークンの組み合わせに対する処理
-fin@@ result="<-"(L):- result(L).
-fu1@@ L=(ins(X,"<-"(L0))) :- L="->"(ins(X,L0)).
-pa1@@ L=[X|"<-"(L0)] :- L="<-"([X|L0]).
-
-L1="->"(ins(X,[Y|L0])) :- L1=[Y|L], L="->"(ins(X,L0)).
-L="->"(ins(X,L0)) :- L="<-"([X|L0]).
-
-L="->"(perm([])) :- L="<-"([]).
-L="->"(perm([X|L0])) :- L1="->"(perm(L0)), L=ins(X,L1).
+//fin@@ result="<-"(L):- result(L).
+//fu1@@ L=(ins(X,"<-"(L0))) :- L="->"(ins(X,L0)).
+//pa1@@ L=[X|"<-"(L0)] :- L="<-"([X|L0]).
+//
+//L1="->"(ins(X,[Y|L0])) :- L1=[Y|L], L="->"(ins(X,L0)).
+//L="->"(ins(X,L0)) :- L="<-"([X|L0]).
+//
+//L="->"(perm([])) :- L="<-"([]).
+//L="->"(perm([X|L0])) :- L1="->"(perm(L0)), L=ins(X,L1).
 
 //% //書き換え規則には含まれないアトムとトークンの組み合わせに対する処理
 //p1@@L=[X|"<-"(L0)] :- L="<-"([X|L0]).

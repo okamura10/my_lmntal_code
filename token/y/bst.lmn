@@ -1,0 +1,103 @@
+// defshape bst(R) {
+// R = bst :- R = node.
+// R = bst :- -INF <= XNUM, XNUM < INF |
+// R = node(XNUM,tree(-INF,XNUM),tree(XNUM,INF)).
+// R = tree(LNUM,RNUM) :- R = nil.
+// R = tree(LNUM,RNUM) :- LNUM <= XNUM, XNUM < RNUM |
+// R = node(XNUM,tree(LNUM,XNUM),tree(XNUM,RNUM)).
+// } nonterminal {
+// tree(LNUM,RNUM,R)
+// }
+
+
+// % // 生成用
+//R = tree($l,$r):-$x=($l+$r)/2,$l < $x, $x < $r |
+//	R = node($x,tree($l,$x),tree($x,$r)).
+//R = tree(LNUM,RNUM) :- int(LNUM),int(RNUM)|R = nil.
+//head=node(6,tree(-1,6),tree(6,12)).
+
+// % // 生成したグラフ
+//head(node(6,node(2,node(0,nil,node(1,nil,nil)),node(4,node(3,nil,nil),node(5,nil,nil))),node(9,node(7,nil,node(8,nil,nil)),node(10,nil,node(11,nil,nil))))).
+
+ % // yamada式型検査
+{
+ start.
+ /* input graph */
+ head(node(6,node(2,node(0,nil,node(1,nil,nil)),node(4,node(3,nil,nil),node(5,nil,nil))),node(9,node(7,nil,node(8,nil,nil)),node(10,nil,node(11,nil,nil))))).
+
+ initialize @@
+ start, head(INP) :-
+ head(goal(token(INP, end, RTN), RTN)).
+
+ rule1 @@
+ R = token(node($x,LEFT,RIGHT), end, RTN1) :-
+	 int($x) |
+		 R = node($x,
+		 token(LEFT, end, RTN2, -99999999, $x),
+		 token(RIGHT, RTN2, RTN1, $x, 99999999)).
+
+
+
+ rule2 @@
+ R = token(nil, end, RTN) :- R = nil, RTN = end.
+
+ rule3 @@
+ R = token(node($x,LEFT,RIGHT), end, RTN1, $l, $r) :-
+	 $l =< $x, $x < $r|
+		 R = node($x,
+		 token(LEFT, end, RTN2, $l, $x),
+		 token(RIGHT, RTN2, RTN1, $x, $r)).
+
+ rule4 @@
+ R = token(nil, end, RTN, $l, $r) :-
+	 int($l), int($r) |
+		 R = nil, RTN = end.
+
+ }.
+goal @@
+ {head(goal(INP,end)), $p[INP], @p} :- ok.
+
+
+//{
+// start.
+// head(node(6,node(2,node(0,nil,node(1,nil,nil)),node(4,node(3,nil,nil),node(5,nil,nil))),node(9,node(7,nil,node(8,nil,nil)),node(10,nil,node(11,nil,nil))))).
+//
+// initialize @@
+// start, head(INP) :-
+// head(goal(token(INP, end(ST), RTN), RTN,ST)).
+//
+// rule1 @@
+// R = token(node($x,LEFT,RIGHT), end(S), RTN1) :-
+//	 int($x) |
+//		 R = node($x,
+//		 token(LEFT, S, RTN2, -99999999, $x),
+//		 token(RIGHT, end(RTN2), RTN1, $x, 99999999)).
+//
+//
+//
+// rule2 @@
+// R = token(nil, end(S), RTN) :- R = nil, RTN = end(S).
+//
+// rule3 @@
+// R = token(node($x,LEFT,RIGHT), end(S), RTN1, $l, $r) :-
+//	 $l =< $x, $x < $r|
+//		 R = node($x,
+//		 token(LEFT, S, RTN2, $l, $x),
+//		 token(RIGHT, end(RTN2), RTN1, $x, $r)).
+//
+// rule4 @@
+// R = token(nil, end(S), RTN, $l, $r) :-
+//	 int($l), int($r) |
+//		 R = nil, RTN = end(S).
+//
+////pass @@ //これだと通常実行時に終わらない
+//// head(goal(INP,end(RTN),ST)) :- head(goal(INP,RTN,A)),ST=end(A).
+//
+//pass1 @@ 
+//  head(goal(INP,end(RTN),ST)), A=token(B,C,RTN,D,E) :- head(goal(INP,RTN,S1)),ST=end(S1),A=token(B,C,RTN,D,E).
+//pass2 @@ 
+//  head(goal(INP,end(RTN),ST)), A=token(B,C,RTN) :- head(goal(INP,RTN,S1)),ST=end(S1),A=token(B,C,RTN).
+//
+// }.
+//goal @@
+// {head(goal(INP,end(S),S)), $p[INP], @p} :- ok.

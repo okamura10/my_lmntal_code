@@ -12,8 +12,8 @@ n=M, n=N :- M>N | n=M-N, n=N.
 n=M, n=N :- M<N | n=M, n=N-M.
 */
 
-bst(node(10,"10th",node(2,"2nd",z,z),z)).
-a(1,2,3).
+//bst(node(10,"10th",node(2,"2nd",z,z),z)).
+//a(1,2,3).
 %a={n(integer.set(1,5), integer.set(1,5))}.
 %root(a),root(b).
 % edge(0,1),edge(1,2),edge(2,3).
@@ -32,4 +32,71 @@ a(1,2,3).
 
 
 
+//rule@@ // グラフ構造を変更しないルール
+//{a([AA,AE],Out)} :- {a([AA,AE],Out)}.
+//
+//b(Out). c(AA). {a([AA,AE],Out)}. e(AE).
+//
+//
+// b(L2). c(L0). e(L1). {[L0,L1]=L3. a(L3,L2). }.
+//
+//b(Out). {a([AA,AE],Out)}. c(AA). e(AE).
+//
+//b(L2). c(L0). e(L1). {[L0,L1]=L3. a(L3,L2). }.
+//b(L2). c(L1). e(L0). {[L0]=L3. [L1|L4]=L5. a(L5,L2).}. 
+//
+//b(Out), d(EE), c(AA), {a([EE|L4],Out), [L0]=L3}, e(L0,AA).
+//
+//head=[1,2,3,4,5].
+//
+//head(1(2('[]'))).
+//
+//a(end),a(find).
+//a(X) :- X\='end'| b(X).
 
+
+//a1(d,b(c),d).
+//a2(d,B,d),B=b(c).
+
+//a.
+//a:-a1. a:-a2.
+//a1:-b. a2:-c.
+//b:-b1. b:-cb. c:-cb. c:-c2.
+//b1:-d. cb:- e. c2:- f.
+//d:- d1. d:- de. e:- de. e:- ef. f:- ef. f :- f2. 
+
+//a(0).b(3).
+//a:- a(1). a:- a(-1).
+//a(N),b:- a(N),a.
+//a(N),a(Y) :- X=N+Y|a(X).
+//a(A),b(B) :- X=A+1,B>-3| a(X),b(B-1).
+//a(A),b(B) :- X=A-1,B>-3| a(X),b(B-1).
+
+% a,a,a,a,x,j,j,j,j. a,x:-y. y,a:-x,a. j,x:-y. y,j:-x,j.
+
+//1@@ a,x:-b,y.
+//1@@ j,x:-k,y.
+//3@@ b,y:-a,x.
+//3@@ k,y:-j,x.
+//
+//2@@ a,y:-a,x.
+//2@@ j,y:-j,x.
+//4@@ b,x:-b,y.
+//4@@ k,x:-k,y.
+
+
+% w(d,d,d,d).
+% w(d,Y,Z,W) :-  b(w(d,d,d),Y,Z,W).
+% w(X,d,Z,W) :-  b(X,w(d,d,d),Z,W).
+% w(X,Y,d,W) :-  b(X,Y,w(d,d,d),W).
+% w(X,Y,Z,d) :-  b(X,Y,Z,w(d,d,d)).
+
+% b(d,Y,Z,W) :-  w(w(d,d,d),Y,Z,W).
+% b(X,d,Z,W) :-  w(X,w(d,d,d),Z,W).
+% b(X,Y,d,W) :-  w(X,Y,w(d,d,d),W).
+% b(X,Y,Z,d) :-  w(X,Y,Z,w(d,d,d)).
+
+//{w}.t(3).
+//{w,$p},t(C):- C>0,C1=C-1|t(C1),{b,$p,"."(X)},{w,"."(X)}.
+//{b,$p},t(C):- C>0,C1=C-1|t(C1),{w,$p,"."(X)},{w,"."(X)}.
+//{w,"."(X),$p},{w,"."(X),$q},t(C):- C>0,C1=C-1|t(C1),{b,"."(Y),$p},{b,"."(Z),$q},{w,"."(Y),"."(Z)}.

@@ -1,0 +1,11 @@
+//defshape alt tree(R){
+//R = alt tree :- R = gen n1.
+//R = gen n1 :- R = n1(gen n1,gen n2).
+//R = gen n1 :- R = n1(gen n2,gen n1).
+//R = gen n2 :- R = n2(gen n1,gen n2).
+//R = gen n2 :- R = n2(gen n2,gen n1).
+//R = gen n1 :- R = l.
+//R = gen n2 :- R = l.
+//} nonterminal {
+//gen n1, gen n2
+//}
